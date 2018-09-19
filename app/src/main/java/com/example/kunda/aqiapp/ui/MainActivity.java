@@ -1,7 +1,9 @@
-package com.example.kunda.aqiapp;
+package com.example.kunda.aqiapp.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.kunda.aqiapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

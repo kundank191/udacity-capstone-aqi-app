@@ -1,4 +1,4 @@
-package com.example.kunda.aqiapp;
+package com.example.kunda.aqiapp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.example.kunda.aqiapp.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -25,6 +27,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(intent);
+                finish();
             }
         },SPLASH_TIME_OUT);
     }
