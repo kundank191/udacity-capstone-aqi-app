@@ -1,6 +1,8 @@
 package com.example.kunda.aqiapp.data.network;
 
 import com.example.kunda.aqiapp.data.AirQualityResponse;
+import com.example.kunda.aqiapp.data.IndicesResponse;
+import com.example.kunda.aqiapp.data.LocationInfoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,15 +16,16 @@ public interface AerisApiService {
 
     String PARAM_CLIENT_ID = "client_id";
     String PARAM_CLIENT_SECRET_ID = "client_secret";
+    String PARAM_POINT_LOCATION = "p";
     String PATH_LATITUDE = "lat";
     String PATH_LONGITUDE = "long";
     String PATH_INDICES_TYPE = "indicesType";
 
     @GET("airquality/{lat},{long}")
     Call<AirQualityResponse.RootObject> getAirQualityData(@Path(PATH_LATITUDE) String lat, @Path(PATH_LONGITUDE) String lang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
-    @GET("countries?p={lat},{long}")
-    Call<AirQualityResponse.RootObject> getLocation(@Path(PATH_LATITUDE) String lat, @Path(PATH_LONGITUDE) String lang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
-    @GET("indices/{indicesType}/55403?p={lat},{long}")
-    Call<AirQualityResponse.RootObject> getIndicesInfo(@Path(PATH_INDICES_TYPE) String indicesType, @Path(PATH_LONGITUDE) String lang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
+    @GET("countries")
+    Call<LocationInfoResponse.RootObject> getLocation(@Query(PARAM_POINT_LOCATION) String latLang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
+    @GET("indices/{indicesType}/55403")
+    Call<IndicesResponse.RootObject> getIndicesInfo(@Path(PATH_INDICES_TYPE) String indicesType, @Query(PARAM_POINT_LOCATION) String latLang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
 
 }
