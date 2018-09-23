@@ -16,7 +16,13 @@ public interface AerisApiService {
     String PARAM_CLIENT_SECRET_ID = "client_secret";
     String PATH_LATITUDE = "lat";
     String PATH_LONGITUDE = "long";
+    String PATH_INDICES_TYPE = "indicesType";
 
     @GET("airquality/{lat},{long}")
     Call<AirQualityResponse.RootObject> getAirQualityData(@Path(PATH_LATITUDE) String lat, @Path(PATH_LONGITUDE) String lang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
+    @GET("countries?p={lat},{long}")
+    Call<AirQualityResponse.RootObject> getLocation(@Path(PATH_LATITUDE) String lat, @Path(PATH_LONGITUDE) String lang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
+    @GET("indices/{indicesType}/55403?p={lat},{long}")
+    Call<AirQualityResponse.RootObject> getIndicesInfo(@Path(PATH_INDICES_TYPE) String indicesType, @Path(PATH_LONGITUDE) String lang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
+
 }
