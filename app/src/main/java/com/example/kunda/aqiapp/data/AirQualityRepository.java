@@ -1,5 +1,7 @@
 package com.example.kunda.aqiapp.data;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -37,12 +39,16 @@ public class AirQualityRepository {
         return sInstance;
     }
 
-    public void getAirQuality(String latitude, String longitude){
+    public LiveData<AirQualityResponse.RootObject> getAirQuality(String latitude, String longitude){
+
+        final LiveData<AirQualityResponse.RootObject> liveData = new MutableLiveData<>();
         Call<AirQualityResponse.RootObject> call = service.getAirQualityData(latitude,longitude,BuildConfig.Api_ID,BuildConfig.Api_Secret_ID);
+
         call.enqueue(new Callback<AirQualityResponse.RootObject>() {
             @Override
             public void onResponse(@NonNull Call<AirQualityResponse.RootObject> call, @NonNull Response<AirQualityResponse.RootObject> response) {
-                Timber.d(response.message());
+                //post response to live data
+                ((MutableLiveData<AirQualityResponse.RootObject>) liveData).postValue(response.body());
             }
 
             @Override
@@ -50,36 +56,44 @@ public class AirQualityRepository {
                 Timber.d(t);
             }
         });
+        return liveData;
     }
 
     public void getLocationInfo(String latitude, String longitude){
+
+        final LiveData<LocationInfoResponse.RootObject> liveData = new MutableLiveData<>();
         String location = latitude + "," + longitude;
-        Call<LocationInfoResponse.RootObject> call1 = service.getLocation(location,BuildConfig.Api_ID,BuildConfig.Api_Secret_ID);
-        call1.enqueue(new Callback<LocationInfoResponse.RootObject>() {
+        Call<LocationInfoResponse.RootObject> call = service.getLocation(location,BuildConfig.Api_ID,BuildConfig.Api_Secret_ID);
+
+        call.enqueue(new Callback<LocationInfoResponse.RootObject>() {
             @Override
             public void onResponse(@NonNull Call<LocationInfoResponse.RootObject> call, @NonNull Response<LocationInfoResponse.RootObject> response) {
-                Timber.d(response.message());
+                //post response to live data
+                ((MutableLiveData<LocationInfoResponse.RootObject>) liveData).postValue(response.body());
             }
 
             @Override
             public void onFailure(@NonNull Call<LocationInfoResponse.RootObject> call, @NonNull Throwable t) {
-
+                Timber.d(t);
             }
         });
     }
 
     public void getIndicesInfo(String latitude, String longitude, String indicesType){
+
+        final LiveData<IndicesResponse.RootObject> liveData = new MutableLiveData<>();
         String location = latitude + "," + longitude;
-        Call<IndicesResponse.RootObject> call2 = service.getIndicesInfo(indicesType,location,BuildConfig.Api_ID,BuildConfig.Api_Secret_ID);
-        call2.enqueue(new Callback<IndicesResponse.RootObject>() {
+        Call<IndicesResponse.RootObject> call = service.getIndicesInfo(indicesType,location,BuildConfig.Api_ID,BuildConfig.Api_Secret_ID);
+
+        call.enqueue(new Callback<IndicesResponse.RootObject>() {
             @Override
             public void onResponse(@NonNull Call<IndicesResponse.RootObject> call, @NonNull Response<IndicesResponse.RootObject> response) {
-                Timber.d(response.message());
+                ((MutableLiveData<IndicesResponse.RootObject>) liveData).postValue(response.body());
             }
 
             @Override
             public void onFailure(@NonNull Call<IndicesResponse.RootObject> call, @NonNull Throwable t) {
-
+                Timber.d(t);
             }
         });
     }

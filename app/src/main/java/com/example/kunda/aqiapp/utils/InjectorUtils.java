@@ -9,7 +9,7 @@ import com.example.kunda.aqiapp.data.AirQualityRepository;
  */
 public class InjectorUtils {
 
-    public AirQualityRepository getAirQualityRepository(Context context){
+    public static AirQualityRepository getAirQualityRepository(Context context){
         return AirQualityRepository.getInstance(context);
     }
 }
