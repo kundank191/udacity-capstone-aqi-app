@@ -38,10 +38,10 @@ public class PollutantInfoAdapter extends RecyclerView.Adapter<PollutantInfoAdap
     }
 
 
-    private ArrayList<AirQualityResponse.Response> airQualityData;
+    private ArrayList<AirQualityResponse.Pollutant> airQualityData;
     private Context context;
 
-    public PollutantInfoAdapter(Context context,ArrayList<AirQualityResponse.Response> airQualityData) {
+    public PollutantInfoAdapter(Context context,ArrayList<AirQualityResponse.Pollutant> airQualityData) {
         this.airQualityData = airQualityData;
         this.context = context;
     }
@@ -55,9 +55,9 @@ public class PollutantInfoAdapter extends RecyclerView.Adapter<PollutantInfoAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final AirQualityResponse.Response airQuality = airQualityData.get(position);
-        holder.pollutantDetailsTV.setText(String.valueOf(airQuality.getLoc().getLat()));
-        holder.pollutantNameTV.setText(String.valueOf(airQuality.getLoc().getLong()));
+        final AirQualityResponse.Pollutant pollutant = airQualityData.get(position);
+        holder.pollutantDetailsTV.setText(pollutant.getName());
+        holder.pollutantNameTV.setText(String.valueOf(pollutant.getAqi()));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PollutantInfoAdapter extends RecyclerView.Adapter<PollutantInfoAdap
         return context;
     }
 
-    public void setAirQualityData(ArrayList<AirQualityResponse.Response> airQualityData) {
+    public void setAirQualityData(ArrayList<AirQualityResponse.Pollutant> airQualityData) {
         this.airQualityData = airQualityData;
         notifyDataSetChanged();
     }

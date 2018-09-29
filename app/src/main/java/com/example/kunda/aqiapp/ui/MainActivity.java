@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         repository.getAirQuality("23.4306","85.4154").observe(this, new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(@Nullable AirQualityResponse.RootObject rootObject) {
-                pollutantAdapter = new PollutantInfoAdapter(getBaseContext(),rootObject.getResponse());
+                pollutantAdapter = new PollutantInfoAdapter(getBaseContext(),rootObject.getResponse().get(0).getPeriods().get(0).getPollutants());
                 pollutantRV.setAdapter(pollutantAdapter);
             }
         });
