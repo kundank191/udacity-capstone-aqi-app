@@ -1,42 +1,98 @@
 package com.example.kunda.aqiapp.ui;
 
-import android.arch.lifecycle.Observer;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
 import com.example.kunda.aqiapp.data.AirQualityResponse;
+import com.example.kunda.aqiapp.data.IndicesResponse;
+import com.example.kunda.aqiapp.data.LocationInfoResponse;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.RecyclerView;
+import timber.log.Timber;
 
-    private PollutantInfoAdapter pollutantAdapter;
-    @BindView(R.id.rv_pollutants)
-    RecyclerView pollutantRV;
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
+    private PollutantsAdapter pollutantAdapter;
+    private RecyclerView pollutantsRV;
+    private int BASE_INDEX = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
+        init();
 
-        pollutantRV.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+      //  pollutantRV.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
 
         AirQualityRepository repository = InjectorUtils.getAirQualityRepository(this);
         repository.getAirQuality("23.4306","85.4154").observe(this, new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(@Nullable AirQualityResponse.RootObject rootObject) {
-                pollutantAdapter = new PollutantInfoAdapter(getBaseContext(),rootObject.getResponse().get(0).getPeriods().get(0).getPollutants());
-                pollutantRV.setAdapter(pollutantAdapter);
+                Timber.d(getPollutants(rootObject).toString());
             }
         });
+
+        repository.getIndicesInfo("23.4306","85.4154","migraine").observe(this, new Observer<IndicesResponse.RootObject>() {
+            @Override
+            public void onChanged(@Nullable IndicesResponse.RootObject rootObject) {
+                Timber.d(getIndicesInfo(rootObject).toString());
+            }
+        });
+
+        repository.getLocationInfo("23.4306","85.4154").observe(this, new Observer<LocationInfoResponse.RootObject>() {
+            @Override
+            public void onChanged(@Nullable LocationInfoResponse.RootObject rootObject) {
+                Timber.d(getLocationInfo(rootObject).toString());
+            }
+        });
+    }
+
+    private void init(){
+        pollutantsRV = findViewById(R.id.rv_pollutants);
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(this);
+    }
+
+    private ArrayList<AirQualityResponse.Pollutant> getPollutants(AirQualityResponse.RootObject rootObject){
+        return rootObject.getResponse().get(BASE_INDEX).getPeriods().get(BASE_INDEX).getPollutants();
+    }
+
+    private IndicesResponse.Indice getIndicesInfo(IndicesResponse.RootObject rootObject){
+        return rootObject.getResponse().get(BASE_INDEX).getIndice();
+    }
+
+    private LocationInfoResponse.Place getLocationInfo(LocationInfoResponse.RootObject rootObject){
+        return rootObject.getResponse().getPlace();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.navigation_home:
+                Toast.makeText(getBaseContext(),R.string.about_app_data,Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_list_places:
+                Toast.makeText(getBaseContext(),R.string.about_app_data,Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_about_pollutants:
+                Toast.makeText(getBaseContext(),R.string.about_app_data,Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_about:
+                Toast.makeText(getBaseContext(),R.string.about_app_data,Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return false;
     }
 }

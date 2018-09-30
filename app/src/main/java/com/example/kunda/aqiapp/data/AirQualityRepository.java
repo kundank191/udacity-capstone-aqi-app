@@ -1,14 +1,14 @@
 package com.example.kunda.aqiapp.data;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.example.kunda.aqiapp.BuildConfig;
 import com.example.kunda.aqiapp.data.network.AerisApiService;
 import com.example.kunda.aqiapp.utils.Constants;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,7 +59,7 @@ public class AirQualityRepository {
         return liveData;
     }
 
-    public void getLocationInfo(String latitude, String longitude){
+    public LiveData<LocationInfoResponse.RootObject> getLocationInfo(String latitude, String longitude){
 
         final LiveData<LocationInfoResponse.RootObject> liveData = new MutableLiveData<>();
         String location = latitude + "," + longitude;
@@ -77,9 +77,11 @@ public class AirQualityRepository {
                 Timber.d(t);
             }
         });
+
+        return liveData;
     }
 
-    public void getIndicesInfo(String latitude, String longitude, String indicesType){
+    public LiveData<IndicesResponse.RootObject> getIndicesInfo(String latitude, String longitude, String indicesType){
 
         final LiveData<IndicesResponse.RootObject> liveData = new MutableLiveData<>();
         String location = latitude + "," + longitude;
@@ -96,5 +98,7 @@ public class AirQualityRepository {
                 Timber.d(t);
             }
         });
+
+        return liveData;
     }
 }

@@ -5,4 +5,10 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="splash_image_content_description">air quality index app</string>
+
+    <!-- Bottom nav bar -->
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="about_app_data">Resources</string>
+    <string name="about_pollutants">Pollutants</string>
 </resources>

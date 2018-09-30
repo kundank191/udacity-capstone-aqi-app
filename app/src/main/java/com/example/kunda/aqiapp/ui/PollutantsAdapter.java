@@ -1,8 +1,6 @@
 package com.example.kunda.aqiapp.ui;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,26 +12,25 @@ import com.example.kunda.aqiapp.data.AirQualityResponse;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Kundan on 28-09-2018.
  */
-public class PollutantInfoAdapter extends RecyclerView.Adapter<PollutantInfoAdapter.ViewHolder>{
+public class PollutantsAdapter extends RecyclerView.Adapter<PollutantsAdapter.ViewHolder>{
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.iv_pollutant_image)
         ImageView pollutantImageIV;
-        @BindView(R.id.tv_pollutant_name)
         TextView pollutantNameTV;
-        @BindView(R.id.tv_pollutant_details)
         TextView pollutantDetailsTV;
 
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            pollutantImageIV = itemView.findViewById(R.id.iv_pollutant_image);
+            pollutantNameTV = itemView.findViewById(R.id.tv_pollutant_name);
+            pollutantDetailsTV = itemView.findViewById(R.id.tv_pollutant_details);
         }
     }
 
@@ -41,7 +38,7 @@ public class PollutantInfoAdapter extends RecyclerView.Adapter<PollutantInfoAdap
     private ArrayList<AirQualityResponse.Pollutant> airQualityData;
     private Context context;
 
-    public PollutantInfoAdapter(Context context,ArrayList<AirQualityResponse.Pollutant> airQualityData) {
+    public PollutantsAdapter(Context context, ArrayList<AirQualityResponse.Pollutant> airQualityData) {
         this.airQualityData = airQualityData;
         this.context = context;
     }
