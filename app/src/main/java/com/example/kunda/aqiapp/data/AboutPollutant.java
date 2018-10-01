@@ -5,20 +5,22 @@ package com.example.kunda.aqiapp.data;
  */
 public class AboutPollutant {
 
-    private int pollutantNameStringID;
+    private int pollutantTitleStringID;
+    private int pollutantSubtitleStringID;
     private int pollutantDescriptionStringID;
     private int pollutantInfoLinkStringID;
     private int pollutantIcon;
 
-    public AboutPollutant(int pollutantNameStringID, int pollutantDescriptionStringID, int pollutantInfoLinkStringID, int pollutantIcon) {
-        this.pollutantNameStringID = pollutantNameStringID;
+    public AboutPollutant(int pollutantNameStringID, int pollutantSubtitleStringID,int pollutantDescriptionStringID, int pollutantInfoLinkStringID, int pollutantIcon) {
+        this.pollutantTitleStringID = pollutantNameStringID;
+        this.pollutantSubtitleStringID = pollutantSubtitleStringID;
         this.pollutantDescriptionStringID = pollutantDescriptionStringID;
         this.pollutantInfoLinkStringID = pollutantInfoLinkStringID;
         this.pollutantIcon = pollutantIcon;
     }
 
-    public int getPollutantNameStringID() {
-        return pollutantNameStringID;
+    public int getPollutantTitleStringID() {
+        return pollutantTitleStringID;
     }
 
     public int getPollutantDescriptionStringID() {
@@ -31,5 +33,9 @@ public class AboutPollutant {
 
     public int getPollutantIcon() {
         return pollutantIcon;
+    }
+
+    public int getPollutantSubtitleStringID() {
+        return pollutantSubtitleStringID;
     }
 }

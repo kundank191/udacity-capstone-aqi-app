@@ -43,15 +43,13 @@ public class PollutantsInfoFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
 
         ArrayList<AboutPollutant> aboutPollutantArrayList = new ArrayList<>();
-        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_o3_name, R.string.pollutant_o3_description, R.string.pollutant_o3_details_link, R.drawable.about_pollutant_ozone));
-        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_pm2_5_name, R.string.pollutant_pm2_5_description, R.string.pollutant_pm2_5_details_link, R.drawable.about_pollutant_pm));
-        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_pm10_name, R.string.pollutant_pm10_description, R.string.pollutant_pm10_details_link, R.drawable.about_pollutant_pm));
-        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_co_name, R.string.pollutant_co_description, R.string.pollutant_co_details_link, R.drawable.about_pollutant_co));
-        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_no2_name, R.string.pollutant_no2_description, R.string.pollutant_no2_details_link, R.drawable.about_pollutant_nox));
-        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_so2_name, R.string.pollutant_so2_description, R.string.pollutant_so2_details_link, R.drawable.about_pollutant_so));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_o3_name,R.string.pollutant_o3_subtitle, R.string.pollutant_o3_description, R.string.pollutant_o3_details_link, R.drawable.about_pollutant_ozone));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_pm_name,R.string.pollutant_pm_subtitle, R.string.pollutant_pm_description, R.string.pollutant_pm_details_link, R.drawable.about_pollutant_pm));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_co_name,R.string.pollutant_co_subtitle,R.string.pollutant_co_description, R.string.pollutant_co_details_link, R.drawable.about_pollutant_co));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_no2_name,R.string.pollutant_no2_subtitle,R.string.pollutant_no2_description, R.string.pollutant_no2_details_link, R.drawable.about_pollutant_nox));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_so2_name,R.string.pollutant_so2_subtitle,R.string.pollutant_so2_description, R.string.pollutant_so2_details_link, R.drawable.about_pollutant_so));
 
         aboutPollutantsAdapter = new AboutPollutantsAdapter(getContext(), aboutPollutantArrayList);
-
         recyclerView.setAdapter(aboutPollutantsAdapter);
         return view;
     }

@@ -17,29 +17,32 @@
 
     <!-- About Pollutants -->
     <string name="pollutant_co_name" translatable="false">CO</string>
+    <string name="pollutant_co_subtitle">Carbon Dioxide</string>
     <string name="pollutant_co_description">CO is an odorless, colorless gas formed by incomplete combustion of carbon in fuel. The main source is motor vehicle exhaust, along with industrial processes and biomass burning. Carbon monoxide binds to hemoglobin in red blood cells, reducing their ability to transport and release oxygen throughout the body. Low exposures can aggravate cardiac ailments, while high exposures cause central nervous system impairment or death. It also plays a role in the generation of ground-level ozone.</string>
     <string name="pollutant_co_details_link" translatable="false">https://www.environment.gov.au/protection/publications/factsheet-carbon-monoxide-co</string>
 
     <string name="pollutant_no2_name" translatable="false">NOx</string>
+    <string name="pollutant_no2_subtitle">Nitrogen Oxides</string>
     <string name="pollutant_no2_description">NOx are highly reactive gases formed when oxygen and nitrogen react at high temperatures during combustion or lightning strikes. Nitrogen present in fuel can also be emitted as NOx during combustion. Emissions are dominated by fossil fuel combustion at northern mid-latitudes and by biomass burning in the tropics.\nIn the atmosphere NOx reacts with volatile organic compounds (VOCs) and carbon monoxide to produce ground-level ozone through a complicated chain reaction mechanism. It is eventually oxidized to nitric acid (HNO3). Like sulfuric acid, nitric acid contributes to acid deposition and to aerosol formation.</string>
     <string name="pollutant_no2_details_link" translatable="false">https://www.environment.gov.au/protection/publications/factsheet-nitrogen-dioxide-no2</string>
 
     <string name="pollutant_o3_name" translatable="false">O3</string>
+    <string name="pollutant_o3_subtitle">Ozone</string>
     <string name="pollutant_o3_description">Ground level or "bad" ozone is not emitted directly into the air, but is created by chemical reactions between oxides of nitrogen (NOx) and volatile organic compounds (VOC) in the presence of sunlight. Emissions from industrial facilities and electric utilities, motor vehicle exhaust, gasoline vapors, and chemical solvents are some of the major sources of NOx and VOC. Breathing ozone can trigger a variety of health problems, particularly for children, the elderly, and people of all ages who have lung diseases such as asthma. Ground level ozone can also have harmful effects on sensitive vegetation and ecosystems.</string>
     <string name="pollutant_o3_details_link" translatable="false">https://www.environment.gov.au/protection/publications/factsheet-ground-level-ozone-o3</string>
 
-    <string name="pollutant_pm2_5_name" translatable="false">Pm 2.5</string>
-    <string name="pollutant_pm2_5_description">Fine particles (PM2.5) are 2.5 micrometers in diameter or smaller, and can only be seen with an electron microscope. Fine particles are produced from all types of combustion, including motor vehicles, power plants, residential wood burning, forest fires, agricultural burning, and some industrial processes. While PM10\'s story ends at the lungs, PM2.5 can pass from our lungs into our blood supply and be carried throughout our bodies thereby making them \"the invisible killer\"</string>
-    <string name="pollutant_pm2_5_details_link" translatable="false">https://www.environment.gov.au/resource/particles</string>
-
-    <string name="pollutant_pm10_name" translatable="false">Pm 10</string>
-    <string name="pollutant_pm10_description">Coarse dust particles (PM10) are 2.5 to 10 micrometers in diameter. Sources include crushing or grinding operations and dust stirred up by vehicles on roads. These tiny particles which are about 30 times smaller than the width of a hair on your head are small enough to get inhaled past our defensive nose hairs and into our lungs.</string>
-    <string name="pollutant_pm10_details_link" translatable="false">https://www.environment.gov.au/resource/particles</string>
+    <string name="pollutant_pm_name" translatable="false">Pm</string>
+    <string name="pollutant_pm_subtitle">Particulate matter</string>
+    <string name="pollutant_pm_description">Coarse dust particles (PM10) are 2.5 to 10 micrometers in diameter. Sources include crushing or grinding operations and dust stirred up by vehicles on roads. These tiny particles which are about 30 times smaller than the width of a hair on your head are small enough to get inhaled past our defensive nose hairs and into our lungs.</string>
+    <string name="pollutant_pm_details_link" translatable="false">https://www.environment.gov.au/resource/particles</string>
 
     <string name="pollutant_so2_name" translatable="false">SO2</string>
+    <string name="pollutant_so2_subtitle">Sulphur dioxide</string>
     <string name="pollutant_so2_description">SO2 is a gas formed when sulfur is exposed to oxygen at high temperatures during fossil fuel combustion, oil refining, or metal smelting. SO2 is toxic at high concentrations, but its principal air pollution effects are associated with the formation of acid rain and aerosols.\nSO2 dissolves in cloud droplets and oxidizes to form sulfuric acid (H2SO4), which can fall to Earth as acid rain or snow or form sulfate aerosol particles in the atmosphere.</string>
     <string name="pollutant_so2_details_link" translatable="false">https://www.environment.gov.au/protection/publications/factsheet-sulfur-dioxide-so2</string>
 
     <string name="reduce_air_pollution_link" translatable="false">https://www.wikihow.com/Take-Action-to-Reduce-Air-Pollution</string>
     <string name="about_air_pollution_nat_geo_link" translatable="false">https://www.nationalgeographic.com/environment/global-warming/pollution/</string>
+    <string name="open_details_of_pollutant">Open details</string>
+    <string name="more_details">More Details</string>
 </resources>
