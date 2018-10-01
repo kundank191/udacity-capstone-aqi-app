@@ -1,10 +1,13 @@
 package com.example.kunda.aqiapp.ui.fragments;
 
 
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AboutPollutant;
@@ -13,6 +16,7 @@ import com.example.kunda.aqiapp.ui.adapters.AboutPollutantsAdapter;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +29,7 @@ public class PollutantsInfoFragment extends Fragment {
 
     private AboutPollutantsAdapter aboutPollutantsAdapter;
     private RecyclerView recyclerView;
+    private Button saveEarthDetails;
 
     public PollutantsInfoFragment() {
         // Required empty public constructor
@@ -40,6 +45,7 @@ public class PollutantsInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pollutants_info, container, false);
         recyclerView = view.findViewById(R.id.about_pollutant_rv);
+        saveEarthDetails = view.findViewById(R.id.button_save_earth_details);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
 
         ArrayList<AboutPollutant> aboutPollutantArrayList = new ArrayList<>();
@@ -51,6 +57,17 @@ public class PollutantsInfoFragment extends Fragment {
 
         aboutPollutantsAdapter = new AboutPollutantsAdapter(getContext(), aboutPollutantArrayList);
         recyclerView.setAdapter(aboutPollutantsAdapter);
+
+        saveEarthDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String url = getContext().getResources().getString(R.string.about_air_pollution_nat_geo_link);
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                builder.setToolbarColor(Color.parseColor("#2196F3"));
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(getContext(), Uri.parse(url));
+            }
+        });
         return view;
     }
 

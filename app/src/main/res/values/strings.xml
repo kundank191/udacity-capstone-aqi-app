@@ -41,6 +41,8 @@
     <string name="pollutant_so2_description">SO2 is a gas formed when sulfur is exposed to oxygen at high temperatures during fossil fuel combustion, oil refining, or metal smelting. SO2 is toxic at high concentrations, but its principal air pollution effects are associated with the formation of acid rain and aerosols.\nSO2 dissolves in cloud droplets and oxidizes to form sulfuric acid (H2SO4), which can fall to Earth as acid rain or snow or form sulfate aerosol particles in the atmosphere.</string>
     <string name="pollutant_so2_details_link" translatable="false">https://www.environment.gov.au/protection/publications/factsheet-sulfur-dioxide-so2</string>
 
+    <string name="save_earth_title">Save Earth</string>
+    <string name="save_earth_description">Every year people all over celebrate World Environment Day, with plans in mind to save earth and the environment. But sometimes we need to ask ourselves “will we really execute our plans?” The existence of nature is the proof of our own existence and everybody appreciates the existence of water, forest, animals, songbird, flora, and fauna, but unfortunately, these can be misused and end up being harmed. The environment is polluted by various things such as radioactive elements, plastics, sewage, domestic waste and industrial pollution.</string>
     <string name="reduce_air_pollution_link" translatable="false">https://www.wikihow.com/Take-Action-to-Reduce-Air-Pollution</string>
     <string name="about_air_pollution_nat_geo_link" translatable="false">https://www.nationalgeographic.com/environment/global-warming/pollution/</string>
     <string name="open_details_of_pollutant">Open details</string>
