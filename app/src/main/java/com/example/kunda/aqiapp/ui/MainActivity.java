@@ -2,13 +2,16 @@ package com.example.kunda.aqiapp.ui;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
 import com.example.kunda.aqiapp.data.AirQualityResponse;
 import com.example.kunda.aqiapp.data.IndicesResponse;
 import com.example.kunda.aqiapp.data.LocationInfoResponse;
+import com.example.kunda.aqiapp.ui.fragments.AboutAppDataFragment;
+import com.example.kunda.aqiapp.ui.fragments.HomeFragment;
+import com.example.kunda.aqiapp.ui.fragments.PollutantsInfoFragment;
+import com.example.kunda.aqiapp.ui.fragments.SavedLocationsFragment;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -17,14 +20,12 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.RecyclerView;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private PollutantsAdapter pollutantAdapter;
-    private RecyclerView pollutantsRV;
     private int BASE_INDEX = 0;
 
     @Override
@@ -33,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
 
         init();
-
-      //  pollutantRV.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
 
         AirQualityRepository repository = InjectorUtils.getAirQualityRepository(this);
         repository.getAirQuality("23.4306","85.4154").observe(this, new Observer<AirQualityResponse.RootObject>() {
@@ -60,9 +59,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void init(){
-        pollutantsRV = findViewById(R.id.rv_pollutants);
         BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
+        //Initially home fragment will be shown
+        setFragment(new HomeFragment());
     }
 
     private ArrayList<AirQualityResponse.Pollutant> getPollutants(AirQualityResponse.RootObject rootObject){
@@ -79,20 +79,33 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Fragment fragment = new HomeFragment();
         switch (menuItem.getItemId()) {
             case R.id.navigation_home:
-                Toast.makeText(getBaseContext(),R.string.about_app_data,Toast.LENGTH_SHORT).show();
-                return true;
+                fragment = new HomeFragment();
+                break;
             case R.id.navigation_list_places:
-                Toast.makeText(getBaseContext(),R.string.about_app_data,Toast.LENGTH_SHORT).show();
-                return true;
+                fragment = new SavedLocationsFragment();
+                break;
             case R.id.navigation_about_pollutants:
-                Toast.makeText(getBaseContext(),R.string.about_app_data,Toast.LENGTH_SHORT).show();
-                return true;
+                fragment = new PollutantsInfoFragment();
+                break;
             case R.id.navigation_about:
-                Toast.makeText(getBaseContext(),R.string.about_app_data,Toast.LENGTH_SHORT).show();
-                return true;
+                fragment = new AboutAppDataFragment();
+                break;
         }
-        return false;
+        setFragment(fragment);
+        return true;
+
+    }
+
+    /**
+     *
+     * @param fragment the fragment which will be shown in the fragment container view
+     */
+    private void setFragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container,fragment)
+                .commit();
     }
 }
