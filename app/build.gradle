@@ -40,5 +40,4 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     // Debugging
     implementation 'com.jakewharton.timber:timber:4.7.1'
-
 }

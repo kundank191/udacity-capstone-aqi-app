@@ -7,61 +7,53 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kunda.aqiapp.R;
+import com.example.kunda.aqiapp.data.AboutPollutant;
+import com.example.kunda.aqiapp.ui.adapters.AboutPollutantsAdapter;
 
+import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PollutantsInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class PollutantsInfoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private AboutPollutantsAdapter aboutPollutantsAdapter;
+    private RecyclerView recyclerView;
 
     public PollutantsInfoFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PollutantsInfoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PollutantsInfoFragment newInstance(String param1, String param2) {
-        PollutantsInfoFragment fragment = new PollutantsInfoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pollutants_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_pollutants_info, container, false);
+        recyclerView = view.findViewById(R.id.about_pollutant_rv);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
+
+        ArrayList<AboutPollutant> aboutPollutantArrayList = new ArrayList<>();
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_o3_name, R.string.pollutant_o3_description, R.string.pollutant_o3_details_link, R.drawable.about_pollutant_ozone));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_pm2_5_name, R.string.pollutant_pm2_5_description, R.string.pollutant_pm2_5_details_link, R.drawable.about_pollutant_pm));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_pm10_name, R.string.pollutant_pm10_description, R.string.pollutant_pm10_details_link, R.drawable.about_pollutant_pm));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_co_name, R.string.pollutant_co_description, R.string.pollutant_co_details_link, R.drawable.about_pollutant_co));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_no2_name, R.string.pollutant_no2_description, R.string.pollutant_no2_details_link, R.drawable.about_pollutant_nox));
+        aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_so2_name, R.string.pollutant_so2_description, R.string.pollutant_so2_details_link, R.drawable.about_pollutant_so));
+
+        aboutPollutantsAdapter = new AboutPollutantsAdapter(getContext(), aboutPollutantArrayList);
+
+        recyclerView.setAdapter(aboutPollutantsAdapter);
+        return view;
     }
 
 }
