@@ -1,14 +1,14 @@
-package com.example.kunda.aqiapp.ui;
+package com.example.kunda.aqiapp.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityResponse;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -22,15 +22,19 @@ public class PollutantsAdapter extends RecyclerView.Adapter<PollutantsAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView pollutantImageIV;
+        FloatingActionButton pollutantAQI;
+        TextView pollutantTitleTV;
         TextView pollutantNameTV;
-        TextView pollutantDetailsTV;
+        TextView pollutantUgmTV;
+        TextView pollutantPpbTV;
 
         ViewHolder(View itemView) {
             super(itemView);
-            pollutantImageIV = itemView.findViewById(R.id.iv_pollutant_image);
+            pollutantAQI = itemView.findViewById(R.id.fab_pollutant_aqi_index);
+            pollutantTitleTV = itemView.findViewById(R.id.tv_pollutant_title);
             pollutantNameTV = itemView.findViewById(R.id.tv_pollutant_name);
-            pollutantDetailsTV = itemView.findViewById(R.id.tv_pollutant_details);
+            pollutantUgmTV = itemView.findViewById(R.id.tv_pollutant_density);
+            pollutantPpbTV = itemView.findViewById(R.id.tv_pollutant_ppb);
         }
     }
 
@@ -46,15 +50,17 @@ public class PollutantsAdapter extends RecyclerView.Adapter<PollutantsAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(getContext()).inflate(R.layout.pollutants_row_item,parent,false);
+        View itemView = LayoutInflater.from(getContext()).inflate(R.layout.pollutant_row_item,parent,false);
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final AirQualityResponse.Pollutant pollutant = airQualityData.get(position);
-        holder.pollutantDetailsTV.setText(pollutant.getName());
-        holder.pollutantNameTV.setText(String.valueOf(pollutant.getAqi()));
+        holder.pollutantNameTV.setText(pollutant.getName());
+        holder.pollutantTitleTV.setText(pollutant.getType());
+        holder.pollutantUgmTV.setText("UGM");
+        holder.pollutantPpbTV.setText("PPB");
     }
 
     @Override

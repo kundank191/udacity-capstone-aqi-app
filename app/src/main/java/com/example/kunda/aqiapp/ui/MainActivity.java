@@ -5,7 +5,6 @@ import android.view.MenuItem;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
-import com.example.kunda.aqiapp.data.AirQualityResponse;
 import com.example.kunda.aqiapp.data.IndicesResponse;
 import com.example.kunda.aqiapp.data.LocationInfoResponse;
 import com.example.kunda.aqiapp.ui.fragments.AboutAppDataFragment;
@@ -14,8 +13,6 @@ import com.example.kunda.aqiapp.ui.fragments.PollutantsInfoFragment;
 import com.example.kunda.aqiapp.ui.fragments.SavedLocationsFragment;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,12 +33,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         init();
 
         AirQualityRepository repository = InjectorUtils.getAirQualityRepository(this);
-        repository.getAirQuality("23.4306","85.4154").observe(this, new Observer<AirQualityResponse.RootObject>() {
-            @Override
-            public void onChanged(@Nullable AirQualityResponse.RootObject rootObject) {
-                Timber.d(getPollutants(rootObject).toString());
-            }
-        });
 
         repository.getIndicesInfo("23.4306","85.4154","migraine").observe(this, new Observer<IndicesResponse.RootObject>() {
             @Override
@@ -63,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigation.setOnNavigationItemSelectedListener(this);
         //Initially home fragment will be shown
         setFragment(new HomeFragment());
-    }
-
-    private ArrayList<AirQualityResponse.Pollutant> getPollutants(AirQualityResponse.RootObject rootObject){
-        return rootObject.getResponse().get(BASE_INDEX).getPeriods().get(BASE_INDEX).getPollutants();
     }
 
     private IndicesResponse.Indice getIndicesInfo(IndicesResponse.RootObject rootObject){
