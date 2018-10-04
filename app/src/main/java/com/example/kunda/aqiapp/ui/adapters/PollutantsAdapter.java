@@ -1,6 +1,8 @@
 package com.example.kunda.aqiapp.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityResponse;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class PollutantsAdapter extends RecyclerView.Adapter<PollutantsAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        FloatingActionButton pollutantAQI;
+        TextView pollutantAqiTV;
         TextView pollutantTitleTV;
         TextView pollutantNameTV;
         TextView pollutantUgmTV;
@@ -30,7 +31,7 @@ public class PollutantsAdapter extends RecyclerView.Adapter<PollutantsAdapter.Vi
 
         ViewHolder(View itemView) {
             super(itemView);
-            pollutantAQI = itemView.findViewById(R.id.fab_pollutant_aqi_index);
+            pollutantAqiTV = itemView.findViewById(R.id.fab_pollutant_aqi_index);
             pollutantTitleTV = itemView.findViewById(R.id.tv_pollutant_title);
             pollutantNameTV = itemView.findViewById(R.id.tv_pollutant_name);
             pollutantUgmTV = itemView.findViewById(R.id.tv_pollutant_density);
@@ -61,6 +62,12 @@ public class PollutantsAdapter extends RecyclerView.Adapter<PollutantsAdapter.Vi
         holder.pollutantTitleTV.setText(pollutant.getType());
         holder.pollutantUgmTV.setText("UGM");
         holder.pollutantPpbTV.setText("PPB");
+        holder.pollutantAqiTV.setText(String.valueOf(pollutant.getAqi()));
+
+        GradientDrawable priorityCircle = (GradientDrawable) holder.pollutantAqiTV.getBackground();
+        // Get the appropriate background color based on the priority
+        String priorityColor = "#" + pollutant.getColor();
+        priorityCircle.setColor(Color.parseColor(priorityColor));
     }
 
     @Override
