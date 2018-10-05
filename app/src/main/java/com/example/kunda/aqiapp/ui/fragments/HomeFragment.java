@@ -47,9 +47,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment, Initialize views
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
         pollutantsDataRV = rootView.findViewById(R.id.rv_pollutants);
         pollutantsDataRV.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
         //Initialize viewModelFactory and viewModel
