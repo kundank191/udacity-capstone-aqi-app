@@ -25,6 +25,7 @@ import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -71,11 +72,20 @@ public class HomeFragment extends Fragment {
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
         // Is only required for the first time when app is launched
-        if (isFirstAppLaunch()) {
+        if (getActivity().getIntent().hasExtra(Constants.IS_FIRST_APP_LAUNCH_KEY)) {
             firstTimeAppLaunch();
+        } else {
+            getLocationDataFromPreferences();
         }
 
         return rootView;
+    }
+
+    private void displayLocationData(AirQualityResponse.RootObject rootObject){
+        pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(rootObject));
+        pollutantsDataRV.setAdapter(pollutantsAdapter);
+        GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+        snapHelper.attachToRecyclerView(pollutantsDataRV);
     }
 
     /**
@@ -89,13 +99,40 @@ public class HomeFragment extends Fragment {
         mainViewModel.getAirQualityResponse(latitude, longitude).observe(this, new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(@Nullable AirQualityResponse.RootObject rootObject) {
-                Timber.d(getPollutants(rootObject).toString());
-                pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(rootObject));
-                pollutantsDataRV.setAdapter(pollutantsAdapter);
-                GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-                snapHelper.attachToRecyclerView(pollutantsDataRV);
+                // Save location offline
+                saveLocationDataInPreferences(rootObject);
+                //display the data
+                displayLocationData(rootObject);
             }
         });
+    }
+
+    private void getLocationDataFromPreferences(){
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE);
+        String locationData = sharedPreferences.getString(Constants.SAVED_LOCATION_DATA,null);
+        if (locationData == null){
+            firstTimeAppLaunch();
+            return;
+        }
+        // Convert string to object using gson and display location data
+        Gson gson = new Gson();
+        AirQualityResponse.RootObject rootObject = gson.fromJson(locationData,AirQualityResponse.RootObject.class);
+        displayLocationData(rootObject);
+        Timber.d(locationData);
+    }
+
+    /**
+     *
+     * @param rootObject the object which contains air quality data of home location
+     *
+     * this function saves the air quality data in form of string in preferences
+     */
+    private void saveLocationDataInPreferences(AirQualityResponse.RootObject rootObject){
+        SharedPreferences.Editor editor = getContext().getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE).edit();
+        Gson gson = new Gson();
+        String objectString = gson.toJson(rootObject);
+        editor.putString(Constants.SAVED_LOCATION_DATA,objectString);
+        editor.apply();
     }
 
     /**
@@ -103,16 +140,15 @@ public class HomeFragment extends Fragment {
      * then gets the location of user , after getting the location the user , the location based air quality data is requested from the internet.
      */
     private void firstTimeAppLaunch() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Objects.requireNonNull(getContext()).checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Objects.requireNonNull(getContext()).checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 //    Activity#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for Activity#requestPermissions for more details.
-                getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},LOCATION_PERMISSION_CODE);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},LOCATION_PERMISSION_CODE);
                 return;
             }
         }
@@ -126,6 +162,7 @@ public class HomeFragment extends Fragment {
      */
     @SuppressLint("MissingPermission")
     private void getLocation(){
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
@@ -167,6 +204,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
     /**
      *
      * @param rootObject the response from the internet
@@ -174,22 +212,5 @@ public class HomeFragment extends Fragment {
      */
     private ArrayList<AirQualityResponse.Pollutant> getPollutants(AirQualityResponse.RootObject rootObject){
         return rootObject.getResponse().get(BASE_INDEX).getPeriods().get(BASE_INDEX).getPollutants();
-    }
-
-    /**
-     *
-     * @return true if app is launched for the first time , else false
-     */
-    private boolean isFirstAppLaunch(){
-        boolean isFirstAppLaunch;
-        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS,Context.MODE_PRIVATE);
-        isFirstAppLaunch = sharedPreferences.getBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY,true);
-        if (isFirstAppLaunch){
-            // A variable will be set to keep track if app was launched earlier
-            SharedPreferences.Editor editor = getContext().getSharedPreferences(Constants.SAVED_LOCATION_PREFS,Context.MODE_PRIVATE).edit();
-            editor.putBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY,false);
-            editor.apply();
-        }
-        return isFirstAppLaunch;
     }
 }

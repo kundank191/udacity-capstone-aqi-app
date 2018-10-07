@@ -95,4 +95,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .replace(R.id.fragment_container,fragment)
                 .commit();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 }

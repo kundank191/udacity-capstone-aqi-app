@@ -28,6 +28,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private TextView[] dots;
     private int[] layouts;
     private Button btnSkip, btnNext;
+    public static String FIRST_TIME_LAUNCH = "first time launch key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
