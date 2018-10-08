@@ -1,4 +1,4 @@
-package com.example.splashscreenandroidlibrary;
+package com.example.kunda.aqiapp.ui;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.kunda.aqiapp.R;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -192,5 +194,4 @@ public class WelcomeActivity extends AppCompatActivity {
             container.removeView(view);
         }
     }
-
 }

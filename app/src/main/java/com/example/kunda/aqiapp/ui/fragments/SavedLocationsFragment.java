@@ -3,7 +3,6 @@ package com.example.kunda.aqiapp.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -31,7 +31,6 @@ import static android.app.Activity.RESULT_OK;
 public class SavedLocationsFragment extends Fragment {
 
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-    private String TAG = "Hello";
 
     public SavedLocationsFragment() {
         // Required empty public constructor
@@ -46,14 +45,13 @@ public class SavedLocationsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPlace();
+                addNewPlace();
             }
         });
         return rootView;
     }
 
-    private void addPlace(){
-
+    private void addNewPlace(){
         try {
             Intent intent =
                     new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
@@ -70,15 +68,15 @@ public class SavedLocationsFragment extends Fragment {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(Objects.requireNonNull(getContext()), data);
-                Log.i(TAG, "Place: " + place.getName() + " " + place.getLatLng());
+                Timber.i("Place: " + place.getName() + " " + place.getLatLng());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(Objects.requireNonNull(getContext()), data);
                 Toast.makeText(getContext(),"Error getting place info",Toast.LENGTH_SHORT).show();
-                Log.i(TAG, status.getStatusMessage());
+                Timber.i(status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
-                Log.d("Handle error","Error Handled");
+                Timber.d("Error Handled");
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
