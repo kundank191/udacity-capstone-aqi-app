@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
+import androidx.room.Embedded;
+
 /**
  * Created by Kundan on 22-09-2018.
  */
@@ -30,7 +32,7 @@ public class AirQualityResponse {
         public void setResponse(ArrayList<Response> response) { this.response = response; }
     }
 
-    public class Loc
+    public static class Loc
     {
         private double lat;
 
@@ -39,14 +41,18 @@ public class AirQualityResponse {
         public void setLat(double lat) { this.lat = lat; }
 
         @SerializedName("long")
-        private double lang;
+        private double longitude;
 
-        public double getLong() { return this.lang; }
+        public double getLongitude() {
+            return longitude;
+        }
 
-        public void setLong(double lang) { this.lang = lang; }
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
     }
 
-    public class Place
+    public static class Place
     {
         private String name;
 
@@ -156,6 +162,7 @@ public class AirQualityResponse {
 
         public void setDominant(String dominant) { this.dominant = dominant; }
 
+        @Embedded
         private ArrayList<Pollutant> pollutants;
 
         public ArrayList<Pollutant> getPollutants() { return this.pollutants; }
@@ -172,7 +179,7 @@ public class AirQualityResponse {
         public void setName(String name) { this.name = name; }
     }
 
-    public class Profile
+    public static class Profile
     {
         private String tz;
 
@@ -180,6 +187,7 @@ public class AirQualityResponse {
 
         public void setTz(String tz) { this.tz = tz; }
 
+        @Embedded
         private ArrayList<Source> sources;
 
         public ArrayList<Source> getSources() { return this.sources; }
@@ -193,7 +201,7 @@ public class AirQualityResponse {
         public void setStations(String stations) { this.stations = stations; }
     }
 
-    public class Response
+    public static class Response
     {
         private String id;
 
@@ -201,24 +209,28 @@ public class AirQualityResponse {
 
         public void setId(String id) { this.id = id; }
 
+        @Embedded
         private Loc loc;
 
         public Loc getLoc() { return this.loc; }
 
         public void setLoc(Loc loc) { this.loc = loc; }
 
+        @Embedded
         private Place place;
 
         public Place getPlace() { return this.place; }
 
         public void setPlace(Place place) { this.place = place; }
 
+        @Embedded
         private ArrayList<Period> periods;
 
         public ArrayList<Period> getPeriods() { return this.periods; }
 
         public void setPeriods(ArrayList<Period> periods) { this.periods = periods; }
 
+        @Embedded
         private Profile profile;
 
         public Profile getProfile() { return this.profile; }

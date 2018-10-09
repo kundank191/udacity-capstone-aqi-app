@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.kunda.aqiapp.AppExecutors;
 import com.example.kunda.aqiapp.R;
+import com.example.kunda.aqiapp.data.database.AppDatabase;
 import com.example.kunda.aqiapp.data.database.LocationData;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import com.example.kunda.aqiapp.ui.adapters.PollutantsAdapter;
@@ -52,6 +54,9 @@ public class HomeFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private final int LOCATION_PERMISSION_CODE = 101;
 
+    private AppDatabase mDb;
+    private AppExecutors executors;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -72,6 +77,9 @@ public class HomeFragment extends Fragment {
         viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
+        mDb = InjectorUtils.provideAppDataBase(getContext());
+        executors = InjectorUtils.provideAppExecutors();
+
         // Is only required for the first time when app is launched
         if (getActivity().getIntent().hasExtra(Constants.IS_FIRST_APP_LAUNCH_KEY)) {
             firstTimeAppLaunch();
@@ -82,11 +90,18 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-    private void displayLocationData(LocationData locationData){
+    private void displayLocationData(final LocationData locationData){
         pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(locationData));
         pollutantsDataRV.setAdapter(pollutantsAdapter);
         GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
         snapHelper.attachToRecyclerView(pollutantsDataRV);
+
+        executors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.locationDataDao().saveLocationData(locationData);
+            }
+        });
     }
 
     /**
