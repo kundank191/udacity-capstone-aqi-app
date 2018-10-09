@@ -1,9 +1,5 @@
 package com.example.kunda.aqiapp.data.network;
 
-import com.example.kunda.aqiapp.data.AirQualityResponse;
-import com.example.kunda.aqiapp.data.IndicesResponse;
-import com.example.kunda.aqiapp.data.LocationInfoResponse;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

@@ -15,7 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.kunda.aqiapp.R;
-import com.example.kunda.aqiapp.data.AirQualityResponse;
+import com.example.kunda.aqiapp.data.database.LocationData;
+import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import com.example.kunda.aqiapp.ui.adapters.PollutantsAdapter;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModel;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModelFactory;
@@ -81,8 +82,8 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-    private void displayLocationData(AirQualityResponse.RootObject rootObject){
-        pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(rootObject));
+    private void displayLocationData(LocationData locationData){
+        pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(locationData));
         pollutantsDataRV.setAdapter(pollutantsAdapter);
         GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
         snapHelper.attachToRecyclerView(pollutantsDataRV);
@@ -95,18 +96,21 @@ public class HomeFragment extends Fragment {
      *
      * request data for air quality data for the desired location
      */
-    private void getLocationData(String latitude, String longitude){
+    private void getLocationDataFromNetwork(String latitude, String longitude){
         mainViewModel.getAirQualityResponse(latitude, longitude).observe(this, new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(@Nullable AirQualityResponse.RootObject rootObject) {
                 // Save location offline
                 saveLocationDataInPreferences(rootObject);
                 //display the data
-                displayLocationData(rootObject);
+                getLocationDataFromPreferences();
             }
         });
     }
 
+    /**
+     * This function gets the location data from the saved preferences and then displays it
+     */
     private void getLocationDataFromPreferences(){
         SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE);
         String locationData = sharedPreferences.getString(Constants.SAVED_LOCATION_DATA,null);
@@ -116,8 +120,8 @@ public class HomeFragment extends Fragment {
         }
         // Convert string to object using gson and display location data
         Gson gson = new Gson();
-        AirQualityResponse.RootObject rootObject = gson.fromJson(locationData,AirQualityResponse.RootObject.class);
-        displayLocationData(rootObject);
+        LocationData homeLocationData = gson.fromJson(locationData,LocationData.class);
+        displayLocationData(homeLocationData);
         Timber.d(locationData);
     }
 
@@ -128,10 +132,11 @@ public class HomeFragment extends Fragment {
      * this function saves the air quality data in form of string in preferences
      */
     private void saveLocationDataInPreferences(AirQualityResponse.RootObject rootObject){
-        SharedPreferences.Editor editor = getContext().getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE).edit();
+        LocationData locationData = new LocationData(getString(R.string.current_location),rootObject.getResponse().get(BASE_INDEX));
         Gson gson = new Gson();
-        String objectString = gson.toJson(rootObject);
-        editor.putString(Constants.SAVED_LOCATION_DATA,objectString);
+        String locationDataString = gson.toJson(locationData);
+        SharedPreferences.Editor editor = getContext().getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE).edit();
+        editor.putString(Constants.SAVED_LOCATION_DATA,locationDataString);
         editor.apply();
     }
 
@@ -140,6 +145,12 @@ public class HomeFragment extends Fragment {
      * then gets the location of user , after getting the location the user , the location based air quality data is requested from the internet.
      */
     private void firstTimeAppLaunch() {
+        // Only when Home fragment has been opened , app will set launched as first time to be false
+        // A variable will be set to keep track if app was launched earlier
+        SharedPreferences.Editor editor = getContext().getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE).edit();
+        editor.putBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY,false);
+        editor.apply();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Objects.requireNonNull(getContext()).checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 //    Activity#requestPermissions
@@ -166,7 +177,7 @@ public class HomeFragment extends Fragment {
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                getLocationData(String.valueOf(location.getLatitude()),String .valueOf(location.getLongitude()));
+                getLocationDataFromNetwork(String.valueOf(location.getLatitude()),String .valueOf(location.getLongitude()));
             }
         });
 
@@ -212,5 +223,14 @@ public class HomeFragment extends Fragment {
      */
     private ArrayList<AirQualityResponse.Pollutant> getPollutants(AirQualityResponse.RootObject rootObject){
         return rootObject.getResponse().get(BASE_INDEX).getPeriods().get(BASE_INDEX).getPollutants();
+    }
+
+    /**
+     *
+     * @param locationData the location data saved in database
+     * @return the air quality data about pollutants in which we are interested
+     */
+    private ArrayList<AirQualityResponse.Pollutant> getPollutants(LocationData locationData){
+        return locationData.getLocationAirQualityData().getPeriods().get(BASE_INDEX).getPollutants();
     }
 }

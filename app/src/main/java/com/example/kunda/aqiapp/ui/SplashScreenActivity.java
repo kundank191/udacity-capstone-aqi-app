@@ -29,8 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         final Intent intent;
         // If app is launched for the first time a welcome activity will be shown
         if (isFirstAppLaunch()) {
-            intent = new Intent(this, MainActivity.class);
-            intent.putExtra(Constants.IS_FIRST_APP_LAUNCH_KEY,true);
+            intent = new Intent(this, WelcomeActivity.class);
         } else {
             intent = new Intent(this,MainActivity.class);
         }
@@ -51,12 +50,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         boolean isFirstAppLaunch;
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE);
         isFirstAppLaunch = sharedPreferences.getBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY,true);
-        if (isFirstAppLaunch){
-            // A variable will be set to keep track if app was launched earlier
-            SharedPreferences.Editor editor = getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE).edit();
-            editor.putBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY,false);
-            editor.apply();
-        }
+        // Default value will be true on first app launch , when home fragment is opened by main activity then , this value will be set to false
         return isFirstAppLaunch;
     }
 }

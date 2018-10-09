@@ -24,6 +24,9 @@
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
 
+    <!-- Home fragment -->
+    <string name="current_location">Current Location</string>
+
     <!-- Bottom nav bar -->
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

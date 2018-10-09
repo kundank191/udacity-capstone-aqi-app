@@ -5,8 +5,8 @@ import android.view.MenuItem;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
-import com.example.kunda.aqiapp.data.IndicesResponse;
-import com.example.kunda.aqiapp.data.LocationInfoResponse;
+import com.example.kunda.aqiapp.data.network.IndicesResponse;
+import com.example.kunda.aqiapp.data.network.LocationInfoResponse;
 import com.example.kunda.aqiapp.ui.fragments.AboutAppDataFragment;
 import com.example.kunda.aqiapp.ui.fragments.HomeFragment;
 import com.example.kunda.aqiapp.ui.fragments.PollutantsInfoFragment;

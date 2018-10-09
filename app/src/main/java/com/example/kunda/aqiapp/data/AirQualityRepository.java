@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.kunda.aqiapp.BuildConfig;
 import com.example.kunda.aqiapp.data.network.AerisApiService;
+import com.example.kunda.aqiapp.data.network.AirQualityResponse;
+import com.example.kunda.aqiapp.data.network.IndicesResponse;
+import com.example.kunda.aqiapp.data.network.LocationInfoResponse;
 import com.example.kunda.aqiapp.utils.Constants;
 
 import androidx.annotation.NonNull;

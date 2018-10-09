@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kunda.aqiapp.R;
-import com.example.kunda.aqiapp.data.AirQualityResponse;
+import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.kunda.aqiapp.data;
+package com.example.kunda.aqiapp.data.network;
 
 import com.google.gson.annotations.SerializedName;
 

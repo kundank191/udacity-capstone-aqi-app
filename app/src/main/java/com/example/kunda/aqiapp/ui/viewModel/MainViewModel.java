@@ -1,9 +1,9 @@
 package com.example.kunda.aqiapp.ui.viewModel;
 
 import com.example.kunda.aqiapp.data.AirQualityRepository;
-import com.example.kunda.aqiapp.data.AirQualityResponse;
-import com.example.kunda.aqiapp.data.IndicesResponse;
-import com.example.kunda.aqiapp.data.LocationInfoResponse;
+import com.example.kunda.aqiapp.data.network.AirQualityResponse;
+import com.example.kunda.aqiapp.data.network.IndicesResponse;
+import com.example.kunda.aqiapp.data.network.LocationInfoResponse;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
