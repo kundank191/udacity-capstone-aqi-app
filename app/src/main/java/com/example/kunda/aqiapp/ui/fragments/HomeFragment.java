@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-    private void displayLocationData(final LocationData locationData){
+    private void displayLocationData(final LocationData locationData) {
         pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(locationData));
         pollutantsDataRV.setAdapter(pollutantsAdapter);
         GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
@@ -105,13 +105,12 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     *
-     * @param latitude of the place
+     * @param latitude  of the place
      * @param longitude of the place
-     *
-     * request data for air quality data for the desired location
+     *                  <p>
+     *                  request data for air quality data for the desired location
      */
-    private void getLocationDataFromNetwork(String latitude, String longitude){
+    private void getLocationDataFromNetwork(String latitude, String longitude) {
         mainViewModel.getAirQualityResponse(latitude, longitude).observe(this, new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(@Nullable AirQualityResponse.RootObject rootObject) {
@@ -126,32 +125,31 @@ public class HomeFragment extends Fragment {
     /**
      * This function gets the location data from the saved preferences and then displays it
      */
-    private void getLocationDataFromPreferences(){
-        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE);
-        String locationData = sharedPreferences.getString(Constants.SAVED_LOCATION_DATA,null);
-        if (locationData == null){
+    private void getLocationDataFromPreferences() {
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE);
+        String locationData = sharedPreferences.getString(Constants.SAVED_LOCATION_DATA, null);
+        if (locationData == null) {
             firstTimeAppLaunch();
             return;
         }
         // Convert string to object using gson and display location data
         Gson gson = new Gson();
-        LocationData homeLocationData = gson.fromJson(locationData,LocationData.class);
+        LocationData homeLocationData = gson.fromJson(locationData, LocationData.class);
         displayLocationData(homeLocationData);
         Timber.d(locationData);
     }
 
     /**
-     *
      * @param rootObject the object which contains air quality data of home location
-     *
-     * this function saves the air quality data in form of string in preferences
+     *                   <p>
+     *                   this function saves the air quality data in form of string in preferences
      */
-    private void saveLocationDataInPreferences(AirQualityResponse.RootObject rootObject){
-        LocationData locationData = new LocationData(getString(R.string.current_location),rootObject.getResponse().get(BASE_INDEX));
+    private void saveLocationDataInPreferences(AirQualityResponse.RootObject rootObject) {
+        LocationData locationData = new LocationData(getString(R.string.current_location), rootObject.getResponse().get(BASE_INDEX));
         Gson gson = new Gson();
         String locationDataString = gson.toJson(locationData);
-        SharedPreferences.Editor editor = getContext().getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE).edit();
-        editor.putString(Constants.SAVED_LOCATION_DATA,locationDataString);
+        SharedPreferences.Editor editor = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
+        editor.putString(Constants.SAVED_LOCATION_DATA, locationDataString);
         editor.apply();
     }
 
@@ -162,8 +160,8 @@ public class HomeFragment extends Fragment {
     private void firstTimeAppLaunch() {
         // Only when Home fragment has been opened , app will set launched as first time to be false
         // A variable will be set to keep track if app was launched earlier
-        SharedPreferences.Editor editor = getContext().getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE).edit();
-        editor.putBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY,false);
+        SharedPreferences.Editor editor = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY, false);
         editor.apply();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -174,7 +172,7 @@ public class HomeFragment extends Fragment {
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for Activity#requestPermissions for more details.
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},LOCATION_PERMISSION_CODE);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_CODE);
                 return;
             }
         }
@@ -187,24 +185,23 @@ public class HomeFragment extends Fragment {
      * case 2 : the location permission has been granted
      */
     @SuppressLint("MissingPermission")
-    private void getLocation(){
+    private void getLocation() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                getLocationDataFromNetwork(String.valueOf(location.getLatitude()),String .valueOf(location.getLongitude()));
+                getLocationDataFromNetwork(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
             }
         });
 
     }
 
     /**
-     *
-     * @param requestCode the permission request code
-     * @param permissions the permissions
+     * @param requestCode  the permission request code
+     * @param permissions  the permissions
      * @param grantResults results for the permissions
-     *
-     * check if location permission has been granted , if granted then user's location air quality data will be retrieved
+     *                     <p>
+     *                     check if location permission has been granted , if granted then user's location air quality data will be retrieved
      *                     else air quality data of a default location will be retrieved.
      */
     @Override
@@ -232,20 +229,18 @@ public class HomeFragment extends Fragment {
 
 
     /**
-     *
      * @param rootObject the response from the internet
      * @return the air quality data about pollutants in which we are interested
      */
-    private ArrayList<AirQualityResponse.Pollutant> getPollutants(AirQualityResponse.RootObject rootObject){
+    private ArrayList<AirQualityResponse.Pollutant> getPollutants(AirQualityResponse.RootObject rootObject) {
         return rootObject.getResponse().get(BASE_INDEX).getPeriods().get(BASE_INDEX).getPollutants();
     }
 
     /**
-     *
      * @param locationData the location data saved in database
      * @return the air quality data about pollutants in which we are interested
      */
-    private ArrayList<AirQualityResponse.Pollutant> getPollutants(LocationData locationData){
+    private ArrayList<AirQualityResponse.Pollutant> getPollutants(LocationData locationData) {
         return locationData.getLocationAirQualityData().getPeriods().get(BASE_INDEX).getPollutants();
     }
 }
