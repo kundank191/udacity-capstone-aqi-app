@@ -15,7 +15,7 @@ import androidx.room.Query;
 @Dao
 public interface LocationDataDao {
 
-    @Query("SELECT * FROM locations")
+    @Query("SELECT * FROM locationData")
     LiveData<List<LocationData>> loadLocationData();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

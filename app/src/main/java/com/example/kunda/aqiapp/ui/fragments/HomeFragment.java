@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kunda.aqiapp.AppExecutors;
@@ -57,6 +58,8 @@ public class HomeFragment extends Fragment {
     private AppDatabase mDb;
     private AppExecutors executors;
 
+    TextView textView;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -80,6 +83,8 @@ public class HomeFragment extends Fragment {
         mDb = InjectorUtils.provideAppDataBase(getContext());
         executors = InjectorUtils.provideAppExecutors();
 
+        textView = rootView.findViewById(R.id.api_index_tv);
+
         // Is only required for the first time when app is launched
         if (getActivity().getIntent().hasExtra(Constants.IS_FIRST_APP_LAUNCH_KEY)) {
             firstTimeAppLaunch();
@@ -96,12 +101,20 @@ public class HomeFragment extends Fragment {
         GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
         snapHelper.attachToRecyclerView(pollutantsDataRV);
 
-        executors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.locationDataDao().saveLocationData(locationData);
-            }
-        });
+        AirQualityResponse.Place place = locationData.getLocationAirQualityData().getPlace();
+        AirQualityResponse.Period airQualityInfo = locationData.getLocationAirQualityData().getPeriods().get(BASE_INDEX);
+
+        String dominantPollutant = airQualityInfo.getDominant();
+        String aqiIndexLocation = String.valueOf(airQualityInfo.getAqi());
+        String airQuality = airQualityInfo.getCategory();
+        String color = airQualityInfo.getColor();
+        String timeUpdated = airQualityInfo.getDateTimeISO();
+        String methodMeasured = airQualityInfo.getMethod();
+        String placeName = place.getName();
+        String country = place.getCountry();
+
+        textView.setText(String.format("%s : %s : %s : %s : %s : %s : %s : %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
+
     }
 
     /**
@@ -145,12 +158,19 @@ public class HomeFragment extends Fragment {
      *                   this function saves the air quality data in form of string in preferences
      */
     private void saveLocationDataInPreferences(AirQualityResponse.RootObject rootObject) {
-        LocationData locationData = new LocationData(getString(R.string.current_location), rootObject.getResponse().get(BASE_INDEX));
+        final LocationData locationData = new LocationData(getString(R.string.current_location), rootObject.getResponse().get(BASE_INDEX));
         Gson gson = new Gson();
         String locationDataString = gson.toJson(locationData);
         SharedPreferences.Editor editor = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
         editor.putString(Constants.SAVED_LOCATION_DATA, locationDataString);
         editor.apply();
+
+        executors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.locationDataDao().saveLocationData(locationData);
+            }
+        });
     }
 
     /**

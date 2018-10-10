@@ -55,10 +55,28 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         final  LocationData locationData = locationDataArrayList.get(position);
 
         holder.locationNameTV.setText(locationData.getLocationName());
-        holder.locationDescriptionTV.setText(String.valueOf(locationData.getLocationID()));
         AirQualityResponse.Loc loc = locationData.getLocationAirQualityData().getLoc();
         String location = " location " + loc.getLat() + " : " + loc.getLongitude();
-        holder.locationDetailsTV.setText(location);
+        holder.locationDescriptionTV.setText(location);
+
+        try {
+
+            AirQualityResponse.Place place = locationData.getLocationAirQualityData().getPlace();
+            AirQualityResponse.Period airQualityInfo = locationData.getLocationAirQualityData().getPeriods().get(0);
+
+            String dominantPollutant = airQualityInfo.getDominant();
+            String aqiIndexLocation = String.valueOf(airQualityInfo.getAqi());
+            String airQuality = airQualityInfo.getCategory();
+            String color = airQualityInfo.getColor();
+            String timeUpdated = airQualityInfo.getDateTimeISO();
+            String methodMeasured = airQualityInfo.getMethod();
+            String placeName = place.getName();
+            String country = place.getCountry();
+
+            holder.locationDetailsTV.setText(String.format("%s : %s : %s : %s : %s : %s : %s : %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

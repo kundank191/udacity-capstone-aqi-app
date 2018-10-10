@@ -52,6 +52,7 @@ public class SavedLocationsFragment extends Fragment {
     private SavedLocationDataAdapter adapter;
     private AppDatabase mDb;
     private AppExecutors appExecutors;
+    private MainViewModel mainViewModel;
 
     public SavedLocationsFragment() {
         // Required empty public constructor
@@ -77,6 +78,8 @@ public class SavedLocationsFragment extends Fragment {
     }
 
     private void init(){
+        MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
+        mainViewModel = ViewModelProviders.of(this,viewModelFactory).get(MainViewModel.class);
         mDb = InjectorUtils.provideAppDataBase(getContext());
         appExecutors = InjectorUtils.provideAppExecutors();
         mDb.locationDataDao().loadLocationData().observe(getActivity(), new Observer<List<LocationData>>() {
@@ -142,9 +145,6 @@ public class SavedLocationsFragment extends Fragment {
     }
 
     private void getLocationDataFromLatLng(final String placeName, final Place place){
-        MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
-        MainViewModel mainViewModel = ViewModelProviders.of(this,viewModelFactory).get(MainViewModel.class);
-
         mainViewModel.getAirQualityResponse(String.valueOf(place.getLatLng().latitude),String.valueOf(place.getLatLng().longitude)).observe(getActivity(), new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(AirQualityResponse.RootObject rootObject) {

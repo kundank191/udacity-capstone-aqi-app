@@ -73,7 +73,7 @@ public class AirQualityResponse {
         public void setCountry(String country) { this.country = country; }
     }
 
-    public class Pollutant
+    public static class Pollutant
     {
         private String type;
 
@@ -87,11 +87,11 @@ public class AirQualityResponse {
 
         public void setName(String name) { this.name = name; }
 
-        private Integer valuePPB;
+        private double valuePPB;
 
-        public Integer getValuePPB() { return this.valuePPB; }
+        public double getValuePPB() { return this.valuePPB; }
 
-        public void setValuePPB(Integer valuePPB) { this.valuePPB = valuePPB; }
+        public void setValuePPB(double valuePPB) { this.valuePPB = valuePPB; }
 
         private double valueUGM3;
 
@@ -99,11 +99,11 @@ public class AirQualityResponse {
 
         public void setValueUGM3(double valueUGM3) { this.valueUGM3 = valueUGM3; }
 
-        private int aqi;
+        private Integer aqi;
 
-        public int getAqi() { return this.aqi; }
+        public Integer getAqi() { return this.aqi; }
 
-        public void setAqi(int aqi) { this.aqi = aqi; }
+        public void setAqi(Integer aqi) { this.aqi = aqi; }
 
         private String category;
 
@@ -118,7 +118,7 @@ public class AirQualityResponse {
         public void setColor(String color) { this.color = color; }
     }
 
-    public class Period
+    public static class Period
     {
         private String dateTimeISO;
 
@@ -126,17 +126,17 @@ public class AirQualityResponse {
 
         public void setDateTimeISO(String dateTimeISO) { this.dateTimeISO = dateTimeISO; }
 
-        private int timestamp;
+        private Integer timestamp;
 
-        public int getTimestamp() { return this.timestamp; }
+        public Integer getTimestamp() { return this.timestamp; }
 
-        public void setTimestamp(int timestamp) { this.timestamp = timestamp; }
+        public void setTimestamp(Integer timestamp) { this.timestamp = timestamp; }
 
-        private int aqi;
+        private Integer aqi;
 
-        public int getAqi() { return this.aqi; }
+        public Integer getAqi() { return this.aqi; }
 
-        public void setAqi(int aqi) { this.aqi = aqi; }
+        public void setAqi(Integer aqi) { this.aqi = aqi; }
 
         private String category;
 
@@ -170,7 +170,7 @@ public class AirQualityResponse {
         public void setPollutants(ArrayList<Pollutant> pollutants) { this.pollutants = pollutants; }
     }
 
-    public class Source
+    public static class Source
     {
         private String name;
 
@@ -194,11 +194,6 @@ public class AirQualityResponse {
 
         public void setSources(ArrayList<Source> sources) { this.sources = sources; }
 
-        private String stations;
-
-        public String getStations() { return this.stations; }
-
-        public void setStations(String stations) { this.stations = stations; }
     }
 
     public static class Response
@@ -223,7 +218,6 @@ public class AirQualityResponse {
 
         public void setPlace(Place place) { this.place = place; }
 
-        @Embedded
         private ArrayList<Period> periods;
 
         public ArrayList<Period> getPeriods() { return this.periods; }

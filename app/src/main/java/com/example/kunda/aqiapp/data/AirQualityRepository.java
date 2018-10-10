@@ -1,6 +1,7 @@
 package com.example.kunda.aqiapp.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.kunda.aqiapp.BuildConfig;
 import com.example.kunda.aqiapp.data.network.AerisApiService;
@@ -56,7 +57,7 @@ public class AirQualityRepository {
 
             @Override
             public void onFailure(@NonNull Call<AirQualityResponse.RootObject> call, @NonNull Throwable t) {
-                Timber.d(t);
+                Log.d("Error getting data",call.toString(),t);
             }
         });
         return liveData;
