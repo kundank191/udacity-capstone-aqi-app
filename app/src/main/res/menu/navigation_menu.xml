@@ -11,7 +11,7 @@
     <item
         android:id="@+id/navigation_list_places"
         android:icon="@drawable/ic_round_view_list"
-        android:title="@string/title_dashboard"
+        android:title="@string/title_saved_locations"
         />
 
     <item

@@ -29,6 +29,7 @@
 
     <!-- Bottom nav bar -->
     <string name="title_home">Home</string>
+    <string name="title_saved_locations">Locations</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="about_app_data">Resources</string>
     <string name="about_pollutants">Pollutants</string>

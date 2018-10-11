@@ -95,6 +95,11 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     *
+     * @param locationData object which stores data about the home location
+     * this function displays the data on the screen
+     */
     private void displayLocationData(final LocationData locationData) {
         pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(locationData));
         pollutantsDataRV.setAdapter(pollutantsAdapter);
@@ -113,7 +118,7 @@ public class HomeFragment extends Fragment {
         String placeName = place.getName();
         String country = place.getCountry();
 
-        textView.setText(String.format("%s : %s : %s : %s : %s : %s : %s : %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
+        textView.setText(String.format("%s \n %s \n %s \n %s \n %s \n %s \n %s \n %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
 
     }
 

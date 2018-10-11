@@ -73,7 +73,7 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
             String placeName = place.getName();
             String country = place.getCountry();
 
-            holder.locationDetailsTV.setText(String.format("%s : %s : %s : %s : %s : %s : %s : %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
+            holder.locationDetailsTV.setText(String.format("%s \n %s \n %s \n %s \n %s \n %s \n %s \n %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
         } catch (NullPointerException e){
             e.printStackTrace();
         }
