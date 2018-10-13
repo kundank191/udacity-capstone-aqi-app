@@ -69,4 +69,5 @@
     <string name="about_air_pollution_nat_geo_link" translatable="false">https://www.nationalgeographic.com/environment/global-warming/pollution/</string>
     <string name="open_details_of_pollutant">Open details</string>
     <string name="more_details">More Details</string>
+    <string name="main_menu_about_location">About Location</string>
 </resources>

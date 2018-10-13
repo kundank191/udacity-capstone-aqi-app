@@ -20,9 +20,4 @@
         android:title="@string/about_pollutants"
         />
 
-    <item
-        android:id="@+id/navigation_about"
-        android:title="@string/about_app_data"
-        android:icon="@drawable/ic_round_info" />
-
 </menu>

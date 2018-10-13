@@ -1,13 +1,14 @@
 package com.example.kunda.aqiapp.ui;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
 import com.example.kunda.aqiapp.data.network.IndicesResponse;
 import com.example.kunda.aqiapp.data.network.LocationInfoResponse;
-import com.example.kunda.aqiapp.ui.fragments.AboutAppDataFragment;
 import com.example.kunda.aqiapp.ui.fragments.HomeFragment;
 import com.example.kunda.aqiapp.ui.fragments.PollutantsInfoFragment;
 import com.example.kunda.aqiapp.ui.fragments.SavedLocationsFragment;
@@ -77,13 +78,26 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_about_pollutants:
                 fragment = new PollutantsInfoFragment();
                 break;
-            case R.id.navigation_about:
-                fragment = new AboutAppDataFragment();
-                break;
         }
         setFragment(fragment);
         return true;
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about_country:
+                Toast.makeText(this,"Your country",Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
     }
 
     /**
