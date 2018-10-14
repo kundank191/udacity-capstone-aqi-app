@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import com.example.kunda.aqiapp.ui.viewModel.MainViewModel;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModelFactory;
 import com.example.kunda.aqiapp.utils.Constants;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -103,8 +101,8 @@ public class HomeFragment extends Fragment {
     private void displayLocationData(final LocationData locationData) {
         pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(locationData));
         pollutantsDataRV.setAdapter(pollutantsAdapter);
-        GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-        snapHelper.attachToRecyclerView(pollutantsDataRV);
+//        GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+//        snapHelper.attachToRecyclerView(pollutantsDataRV);
 
         AirQualityResponse.Place place = locationData.getLocationAirQualityData().getPlace();
         AirQualityResponse.Period airQualityInfo = locationData.getLocationAirQualityData().getPeriods().get(BASE_INDEX);
