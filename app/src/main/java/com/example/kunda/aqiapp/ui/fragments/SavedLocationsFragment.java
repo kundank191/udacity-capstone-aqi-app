@@ -11,9 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.kunda.aqiapp.AppExecutors;
 import com.example.kunda.aqiapp.R;
-import com.example.kunda.aqiapp.data.database.AppDatabase;
 import com.example.kunda.aqiapp.data.database.LocationData;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import com.example.kunda.aqiapp.ui.adapters.SavedLocationDataAdapter;
@@ -41,6 +39,7 @@ import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static com.example.kunda.aqiapp.utils.Constants.BASE_INDEX;
 
 /**
  * create an instance of this fragment.
@@ -50,8 +49,6 @@ public class SavedLocationsFragment extends Fragment {
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private RecyclerView locationDataRV;
     private SavedLocationDataAdapter adapter;
-    private AppDatabase mDb;
-    private AppExecutors appExecutors;
     private MainViewModel mainViewModel;
 
     public SavedLocationsFragment() {
@@ -65,7 +62,7 @@ public class SavedLocationsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_saved_locations, container, false);
 
         locationDataRV = rootView.findViewById(R.id.rv_saved_location_data);
-        locationDataRV.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
+        locationDataRV.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         FloatingActionButton button = rootView.findViewById(R.id.fab_add_place);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,28 +74,26 @@ public class SavedLocationsFragment extends Fragment {
         return rootView;
     }
 
-    private void init(){
+    private void init() {
         MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
-        mainViewModel = ViewModelProviders.of(this,viewModelFactory).get(MainViewModel.class);
-        mDb = InjectorUtils.provideAppDataBase(getContext());
-        appExecutors = InjectorUtils.provideAppExecutors();
-        mDb.locationDataDao().loadLocationData().observe(getActivity(), new Observer<List<LocationData>>() {
+        mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
+
+        mainViewModel.getSavedLocationDataList().observe(getActivity(), new Observer<List<LocationData>>() {
             @Override
             public void onChanged(List<LocationData> locationData) {
-                adapter = new SavedLocationDataAdapter(getContext(),locationData);
+                adapter = new SavedLocationDataAdapter(getContext(), locationData);
                 locationDataRV.setAdapter(adapter);
             }
         });
     }
 
-    private void addNewPlace(){
+    private void addNewPlace() {
         try {
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
                             .build(Objects.requireNonNull(getActivity()));
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-            Toast.makeText(getContext(),"Error getting place info",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Error getting place info", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -106,23 +101,26 @@ public class SavedLocationsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(Objects.requireNonNull(getContext()), data);
-                Timber.i("Place: " + place.getName() + " " + place.getLatLng());
-                getLocationNameFromDialogBox(place);
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(Objects.requireNonNull(getContext()), data);
-                Toast.makeText(getContext(),"Error getting place info",Toast.LENGTH_SHORT).show();
-                Timber.i(status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-                Timber.d("Error Handled");
+            switch (resultCode) {
+                case RESULT_OK:
+                    Place place = PlaceAutocomplete.getPlace(Objects.requireNonNull(getContext()), data);
+                    getLocationNameFromDialogBox(place);
+                    break;
+                case PlaceAutocomplete.RESULT_ERROR:
+                    Status status = PlaceAutocomplete.getStatus(Objects.requireNonNull(getContext()), data);
+                    Toast.makeText(getContext(), "Error getting place info", Toast.LENGTH_SHORT).show();
+                    Timber.i(status.getStatusMessage());
+                    break;
+                case RESULT_CANCELED:
+                    // The user canceled the operation.
+                    Timber.d("Error Handled");
+                    break;
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void getLocationNameFromDialogBox(final Place place){
+    private void getLocationNameFromDialogBox(final Place place) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
         alertDialog.setTitle("Add Location");
         alertDialog.setMessage("Enter name of the new location");
@@ -138,28 +136,23 @@ public class SavedLocationsFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String locationName = input.getText().toString();
-                getLocationDataFromLatLng(locationName,place);
+                getLocationDataFromLatLng(locationName, place);
             }
         });
         alertDialog.show();
     }
 
-    private void getLocationDataFromLatLng(final String placeName, final Place place){
-        mainViewModel.getAirQualityResponse(String.valueOf(place.getLatLng().latitude),String.valueOf(place.getLatLng().longitude)).observe(getActivity(), new Observer<AirQualityResponse.RootObject>() {
+    private void getLocationDataFromLatLng(final String placeName, final Place place) {
+        mainViewModel.getAirQualityResponse(String.valueOf(place.getLatLng().latitude), String.valueOf(place.getLatLng().longitude)).observe(getActivity(), new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(AirQualityResponse.RootObject rootObject) {
-                saveLocationData(placeName,rootObject.getResponse().get(0));
+                saveLocationData(placeName, rootObject.getResponse().get(BASE_INDEX));
             }
         });
     }
 
-    private void saveLocationData(String placeName,AirQualityResponse.Response locationAirQualityData){
-        final LocationData locationData = new LocationData(placeName,locationAirQualityData);
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.locationDataDao().saveLocationData(locationData);
-            }
-        });
+    private void saveLocationData(String placeName, AirQualityResponse.Response locationAirQualityData) {
+        final LocationData locationData = new LocationData(placeName, locationAirQualityData);
+        mainViewModel.saveNewLocationData(locationData);
     }
 }

@@ -14,9 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kunda.aqiapp.AppExecutors;
 import com.example.kunda.aqiapp.R;
-import com.example.kunda.aqiapp.data.database.AppDatabase;
 import com.example.kunda.aqiapp.data.database.LocationData;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import com.example.kunda.aqiapp.ui.adapters.PollutantsAdapter;
@@ -41,22 +39,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import timber.log.Timber;
 
+import static com.example.kunda.aqiapp.utils.Constants.BASE_INDEX;
+
 /**
  */
 public class HomeFragment extends Fragment {
 
-    private int BASE_INDEX = 0;
     private RecyclerView pollutantsDataRV;
     private PollutantsAdapter pollutantsAdapter;
-    private MainViewModelFactory viewModelFactory;
     private MainViewModel mainViewModel;
-    private FusedLocationProviderClient fusedLocationProviderClient;
     private final int LOCATION_PERMISSION_CODE = 101;
 
-    private AppDatabase mDb;
-    private AppExecutors executors;
-
-    TextView textView;
+    private TextView textView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -75,16 +69,13 @@ public class HomeFragment extends Fragment {
         pollutantsDataRV = rootView.findViewById(R.id.rv_pollutants);
         pollutantsDataRV.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         //Initialize viewModelFactory and viewModel
-        viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
+        MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
-
-        mDb = InjectorUtils.provideAppDataBase(getContext());
-        executors = InjectorUtils.provideAppExecutors();
 
         textView = rootView.findViewById(R.id.api_index_tv);
 
         // Is only required for the first time when app is launched
-        if (getActivity().getIntent().hasExtra(Constants.IS_FIRST_APP_LAUNCH_KEY)) {
+        if (Objects.requireNonNull(getActivity()).getIntent().hasExtra(Constants.IS_FIRST_APP_LAUNCH_KEY)) {
             firstTimeAppLaunch();
         } else {
             getLocationDataFromPreferences();
@@ -130,10 +121,14 @@ public class HomeFragment extends Fragment {
         mainViewModel.getAirQualityResponse(latitude, longitude).observe(this, new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(@Nullable AirQualityResponse.RootObject rootObject) {
-                // Save location offline
-                saveLocationDataInPreferences(rootObject);
-                //display the data
-                getLocationDataFromPreferences();
+                if (rootObject != null) {
+                    // Save location offline
+                    saveLocationDataInPreferences(rootObject);
+                    //display the data
+                    getLocationDataFromPreferences();
+                } else {
+                    Toast.makeText(getActivity(),"Error getting data from internet",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -168,12 +163,7 @@ public class HomeFragment extends Fragment {
         editor.putString(Constants.SAVED_LOCATION_DATA, locationDataString);
         editor.apply();
 
-        executors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.locationDataDao().saveLocationData(locationData);
-            }
-        });
+        mainViewModel.saveNewLocationData(locationData);
     }
 
     /**
@@ -209,7 +199,7 @@ public class HomeFragment extends Fragment {
      */
     @SuppressLint("MissingPermission")
     private void getLocation() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
@@ -244,19 +234,10 @@ public class HomeFragment extends Fragment {
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(getActivity(), "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Permission denied to access location", Toast.LENGTH_SHORT).show();
                 }
             }
         }
-    }
-
-
-    /**
-     * @param rootObject the response from the internet
-     * @return the air quality data about pollutants in which we are interested
-     */
-    private ArrayList<AirQualityResponse.Pollutant> getPollutants(AirQualityResponse.RootObject rootObject) {
-        return rootObject.getResponse().get(BASE_INDEX).getPeriods().get(BASE_INDEX).getPollutants();
     }
 
     /**

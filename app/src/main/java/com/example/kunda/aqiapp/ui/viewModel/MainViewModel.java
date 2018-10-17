@@ -1,9 +1,12 @@
 package com.example.kunda.aqiapp.ui.viewModel;
 
 import com.example.kunda.aqiapp.data.AirQualityRepository;
+import com.example.kunda.aqiapp.data.database.LocationData;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import com.example.kunda.aqiapp.data.network.IndicesResponse;
-import com.example.kunda.aqiapp.data.network.LocationInfoResponse;
+import com.example.kunda.aqiapp.data.network.CountryInfoResponse;
+
+import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -23,7 +26,7 @@ public class MainViewModel extends ViewModel {
     private String latitude;
     private String longitude;
     private LiveData<AirQualityResponse.RootObject> airQualityResponse;
-    private LiveData<LocationInfoResponse.RootObject> locationInfoResponse;
+    private LiveData<CountryInfoResponse.RootObject> locationInfoResponse;
     private LiveData<IndicesResponse.RootObject> indicesInfoResponse;
 
     public void setLongitude(String longitude) {
@@ -47,14 +50,22 @@ public class MainViewModel extends ViewModel {
         return airQualityResponse;
     }
 
-    public LiveData<LocationInfoResponse.RootObject> getLocationInfoResponse(String latitude, String longitude) {
-        locationInfoResponse = repository.getLocationInfo(latitude,longitude);
+    public LiveData<CountryInfoResponse.RootObject> getLocationInfoResponse(String latitude, String longitude) {
+        locationInfoResponse = repository.getCountryData(latitude,longitude);
         return locationInfoResponse;
     }
 
     public LiveData<IndicesResponse.RootObject> getIndicesInfoResponse(String latitude, String longitude, String indicesType) {
         indicesInfoResponse = repository.getIndicesInfo(latitude,longitude,indicesType);
         return indicesInfoResponse;
+    }
+
+    public LiveData<List<LocationData>> getSavedLocationDataList(){
+        return repository.loadSavedLocationData();
+    }
+
+    public void saveNewLocationData(LocationData locationData){
+        repository.saveLocationData(locationData);
     }
 
 }

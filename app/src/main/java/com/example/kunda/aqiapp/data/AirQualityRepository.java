@@ -1,7 +1,6 @@
 package com.example.kunda.aqiapp.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.kunda.aqiapp.AppExecutors;
 import com.example.kunda.aqiapp.BuildConfig;
@@ -69,7 +68,7 @@ public class AirQualityRepository {
 
             @Override
             public void onFailure(@NonNull Call<AirQualityResponse.RootObject> call, @NonNull Throwable t) {
-                Log.d("Error getting data", call.toString(), t);
+                Timber.d(t, call.toString());
             }
         });
         return liveData;
@@ -118,6 +117,14 @@ public class AirQualityRepository {
         return liveData;
     }
 
+    public LiveData<List<LocationData>> loadSavedLocationData(){
+        return mDb.locationDataDao().loadLocationData();
+    }
+
+    public void saveLocationData(LocationData locationData){
+        mDb.locationDataDao().saveLocationData(locationData);
+    }
+
     /**
      * This function will be called by a service to refresh data of all saved locations from data base
      */
@@ -151,12 +158,12 @@ public class AirQualityRepository {
 
                     @Override
                     public void onFailure(@NonNull Call<AirQualityResponse.RootObject> call, @NonNull Throwable t) {
-                        Log.d("Error getting data", call.toString(), t);
+                        Timber.d(t, call.toString());
                     }
                 });
             }
         } else {
-            Log.d("Empty repository", "The repository has no saved location");
+            Timber.d("The repository has no saved location");
         }
     }
 }
