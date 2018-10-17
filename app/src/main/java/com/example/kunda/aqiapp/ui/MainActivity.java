@@ -1,7 +1,6 @@
 package com.example.kunda.aqiapp.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,8 +10,7 @@ import android.widget.Toast;
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
 import com.example.kunda.aqiapp.data.network.CountryInfoResponse;
-import com.example.kunda.aqiapp.data.network.IndicesResponse;
-import com.example.kunda.aqiapp.data.sync.SyncLocationDataService;
+import com.example.kunda.aqiapp.data.sync.SyncUtils;
 import com.example.kunda.aqiapp.ui.fragments.HomeFragment;
 import com.example.kunda.aqiapp.ui.fragments.PollutantsInfoFragment;
 import com.example.kunda.aqiapp.ui.fragments.SavedLocationsFragment;
@@ -29,8 +27,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
-import static com.example.kunda.aqiapp.utils.Constants.BASE_INDEX;
-
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -45,8 +41,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         AirQualityRepository repository = InjectorUtils.getAirQualityRepository(this);
 
-        Intent intent = new Intent(this,SyncLocationDataService.class);
-        startService(intent);
+        SyncUtils.initializeSync(this);
 
         repository.getCountryData("23.4306","85.4154").observe(this, new Observer<CountryInfoResponse.RootObject>() {
             @Override
@@ -59,14 +54,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void init(){
         BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
-    }
-
-    private IndicesResponse.Indice getIndicesInfo(IndicesResponse.RootObject rootObject){
-        return rootObject.getResponse().get(BASE_INDEX).getIndice();
-    }
-
-    private CountryInfoResponse.Place getLocationInfo(CountryInfoResponse.RootObject rootObject){
-        return rootObject.getResponse().getPlace();
     }
 
     @Override
