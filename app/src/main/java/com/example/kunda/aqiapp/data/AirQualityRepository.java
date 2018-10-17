@@ -27,6 +27,7 @@ import timber.log.Timber;
 
 /**
  * Created by Kundan on 25-09-2018.
+ * App repository
  */
 public class AirQualityRepository {
 
@@ -40,6 +41,7 @@ public class AirQualityRepository {
             .build();
     private AerisApiService service = retrofit.create(AerisApiService.class);
 
+    // This repository is a singleton
     public static AirQualityRepository getInstance(Context context) {
         if (sInstance == null) {
             synchronized (LOCK) {
@@ -49,11 +51,17 @@ public class AirQualityRepository {
         return sInstance;
     }
 
+    // Constructor
     private AirQualityRepository(Context context) {
         mDb = InjectorUtils.provideAppDataBase(context);
         executors = InjectorUtils.provideAppExecutors();
     }
 
+    /**
+     * @param latitude  of the place
+     * @param longitude of the place
+     * @return a live data object of the response from the internet
+     */
     public LiveData<AirQualityResponse.RootObject> getAirQuality(String latitude, String longitude) {
 
         final LiveData<AirQualityResponse.RootObject> liveData = new MutableLiveData<>();
@@ -74,6 +82,12 @@ public class AirQualityRepository {
         return liveData;
     }
 
+
+    /**
+     * @param latitude  of the place
+     * @param longitude of the place
+     * @return a live data object of the response from the internet
+     */
     public LiveData<CountryInfoResponse.RootObject> getCountryData(String latitude, String longitude) {
 
         final LiveData<CountryInfoResponse.RootObject> liveData = new MutableLiveData<>();
@@ -117,11 +131,19 @@ public class AirQualityRepository {
         return liveData;
     }
 
-    public LiveData<List<LocationData>> loadSavedLocationData(){
+    /**
+     *
+     * @return live data list of LocationData from database
+     */
+    public LiveData<List<LocationData>> loadSavedLocationData() {
         return mDb.locationDataDao().loadLocationData();
     }
 
-    public void saveLocationData(LocationData locationData){
+    /**
+     * saves the location data in local repository
+     * @param locationData to be saved
+     */
+    public void saveLocationData(LocationData locationData) {
         mDb.locationDataDao().saveLocationData(locationData);
     }
 

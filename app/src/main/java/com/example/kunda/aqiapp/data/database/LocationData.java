@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 
 /**
  * Created by Kundan on 09-10-2018.
+ * Data object which will be stored in the database
  */
 @Entity(tableName = AppDatabase.DATABASE_NAME)
 public class LocationData {

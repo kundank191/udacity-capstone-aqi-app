@@ -12,6 +12,7 @@ import androidx.room.Update;
 
 /**
  * Created by Kundan on 09-10-2018.
+ * DAO object for room , to save LocationData
  */
 @Dao
 public interface LocationDataDao {

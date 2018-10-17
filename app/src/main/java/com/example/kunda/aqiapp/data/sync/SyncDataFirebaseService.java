@@ -9,6 +9,7 @@ import static com.example.kunda.aqiapp.utils.Constants.ACTION_REFRESH_COUNTRY_DA
 
 /**
  * Created by Kundan on 17-10-2018.
+ * Firebase job service , this service starts the SyncLocationDataService to sync data
  */
 public class SyncDataFirebaseService extends JobService {
     @Override

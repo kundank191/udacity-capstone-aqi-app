@@ -15,6 +15,7 @@ import static com.example.kunda.aqiapp.utils.Constants.ACTION_REFRESH_COUNTRY_DA
 
 /**
  * Created by Kundan on 17-10-2018.
+ * This service syncs data between local repository and server
  */
 public class SyncLocationDataService extends IntentService {
 

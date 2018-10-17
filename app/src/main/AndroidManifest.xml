@@ -25,7 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.WelcomeActivity"></activity>
+        <activity android:name=".ui.WelcomeActivity"
+            android:theme="@style/AppThemeNoTitle"></activity>
+
+        <service android:name=".data.sync.SyncLocationDataService" />
+        <service android:name=".data.sync.SyncDataFirebaseService" />
     </application>
 
 </manifest>
