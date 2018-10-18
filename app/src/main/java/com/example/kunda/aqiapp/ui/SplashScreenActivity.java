@@ -1,21 +1,20 @@
 package com.example.kunda.aqiapp.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.kunda.aqiapp.R;
-import com.example.kunda.aqiapp.utils.Constants;
+import com.example.kunda.aqiapp.utils.PrefUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.example.kunda.aqiapp.utils.Constants.SPLASH_TIME_OUT;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private int SPLASH_TIME_OUT = 2000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +27,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         final Intent intent;
         // If app is launched for the first time a welcome activity will be shown
-        if (isFirstAppLaunch()) {
+        if (PrefUtils.isFirstAppLaunch(this)) {
             intent = new Intent(this, WelcomeActivity.class);
         } else {
             intent = new Intent(this,MainActivity.class);
@@ -40,17 +39,5 @@ public class SplashScreenActivity extends AppCompatActivity {
                 finish();
             }
         },SPLASH_TIME_OUT);
-    }
-
-    /**
-     *
-     * @return true if app is launched for the first time , else false
-     */
-    private boolean isFirstAppLaunch(){
-        boolean isFirstAppLaunch;
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE);
-        isFirstAppLaunch = sharedPreferences.getBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY,true);
-        // Default value will be true on first app launch , when home fragment is opened by main activity then , this value will be set to false
-        return isFirstAppLaunch;
     }
 }

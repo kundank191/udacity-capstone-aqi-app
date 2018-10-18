@@ -154,5 +154,6 @@ public class SavedLocationsFragment extends Fragment {
     private void saveLocationData(String placeName, AirQualityResponse.Response locationAirQualityData) {
         final LocationData locationData = new LocationData(placeName, locationAirQualityData);
         mainViewModel.saveNewLocationData(locationData);
+        mainViewModel.saveHomeLocationData(locationData);
     }
 }

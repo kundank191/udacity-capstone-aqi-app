@@ -22,6 +22,7 @@ import com.example.kunda.aqiapp.ui.viewModel.MainViewModel;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModelFactory;
 import com.example.kunda.aqiapp.utils.Constants;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
+import com.example.kunda.aqiapp.utils.PrefUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -75,7 +76,7 @@ public class HomeFragment extends Fragment {
         textView = rootView.findViewById(R.id.api_index_tv);
 
         // Is only required for the first time when app is launched
-        if (Objects.requireNonNull(getActivity()).getIntent().hasExtra(Constants.IS_FIRST_APP_LAUNCH_KEY)) {
+        if (PrefUtils.isFirstAppLaunch(Objects.requireNonNull(getContext()))) {
             firstTimeAppLaunch();
         } else {
             getLocationDataFromPreferences();
@@ -172,10 +173,7 @@ public class HomeFragment extends Fragment {
      */
     private void firstTimeAppLaunch() {
         // Only when Home fragment has been opened , app will set launched as first time to be false
-        // A variable will be set to keep track if app was launched earlier
-        SharedPreferences.Editor editor = Objects.requireNonNull(getContext()).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
-        editor.putBoolean(Constants.IS_FIRST_APP_LAUNCH_KEY, false);
-        editor.apply();
+        PrefUtils.appFirstTimeLaunched(getContext());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Objects.requireNonNull(getContext()).checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

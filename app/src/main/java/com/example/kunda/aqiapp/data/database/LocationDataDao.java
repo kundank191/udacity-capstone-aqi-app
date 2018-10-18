@@ -17,14 +17,20 @@ import androidx.room.Update;
 @Dao
 public interface LocationDataDao {
 
-    @Query("SELECT * FROM locationData")
+    @Query("SELECT * FROM `locationdata-new`")
     LiveData<List<LocationData>> loadLocationData();
 
-    @Query("SELECT * FROM locationData")
+    @Query("SELECT * FROM `locationdata-new`")
     List<LocationData> getLocationDataList();
+
+    @Query("SELECT * FROM `locationdata-new` WHERE locationID = :locationID")
+    LocationData getLocationDataByID(int locationID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveLocationData(LocationData locationData);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long saveHomeLocation(LocationData locationData);
 
     @Update
     void updateLocationData(LocationData locationData);

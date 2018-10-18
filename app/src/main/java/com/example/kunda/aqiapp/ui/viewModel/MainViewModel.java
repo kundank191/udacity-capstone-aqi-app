@@ -3,8 +3,8 @@ package com.example.kunda.aqiapp.ui.viewModel;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
 import com.example.kunda.aqiapp.data.database.LocationData;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
-import com.example.kunda.aqiapp.data.network.IndicesResponse;
 import com.example.kunda.aqiapp.data.network.CountryInfoResponse;
+import com.example.kunda.aqiapp.data.network.IndicesResponse;
 
 import java.util.List;
 
@@ -28,6 +28,7 @@ public class MainViewModel extends ViewModel {
     private LiveData<AirQualityResponse.RootObject> airQualityResponse;
     private LiveData<CountryInfoResponse.RootObject> locationInfoResponse;
     private LiveData<IndicesResponse.RootObject> indicesInfoResponse;
+    private String countryData = null;
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
@@ -68,4 +69,19 @@ public class MainViewModel extends ViewModel {
         repository.saveLocationData(locationData);
     }
 
+    public void saveHomeLocationData(LocationData locationData){
+        repository.saveHomeLocationData(locationData);
+    }
+
+    public long getHomeLocationDataID(){
+        return repository.getHomeLocationDataID();
+    }
+
+    public String getCountryData() {
+        return countryData;
+    }
+
+    public void setCountryData(String countryData) {
+        this.countryData = countryData;
+    }
 }

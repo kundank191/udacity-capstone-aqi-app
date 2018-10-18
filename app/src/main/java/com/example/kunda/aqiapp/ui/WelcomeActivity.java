@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.kunda.aqiapp.R;
-import com.example.kunda.aqiapp.utils.Constants;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -116,7 +115,6 @@ public class WelcomeActivity extends AppCompatActivity {
     private void launchHomeScreen() {
         // Main activity will be called with an intent , which tells that it is the first time the app has been launched
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Constants.IS_FIRST_APP_LAUNCH_KEY,true);
         startActivity(intent);
     }
 

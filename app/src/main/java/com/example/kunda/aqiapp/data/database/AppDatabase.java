@@ -17,7 +17,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static final Object LOCK = new Object();
     private static AppDatabase sInstance;
-    static final String DATABASE_NAME = "locationData";
+    static final String DATABASE_NAME = "locationData-new";
     // This class is a singleton
     public static AppDatabase getInstance(Context context){
         if (sInstance == null){

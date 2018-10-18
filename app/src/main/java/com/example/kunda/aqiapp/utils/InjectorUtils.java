@@ -1,6 +1,7 @@
 package com.example.kunda.aqiapp.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.kunda.aqiapp.AppExecutors;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
@@ -23,6 +24,10 @@ public class InjectorUtils {
 
     public static AppDatabase provideAppDataBase(Context context){
         return AppDatabase.getInstance(context);
+    }
+
+    public static SharedPreferences provideSharedPreferences(Context context){
+        return context.getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE);
     }
 
     public static AppExecutors provideAppExecutors(){

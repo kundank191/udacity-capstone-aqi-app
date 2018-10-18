@@ -1,6 +1,7 @@
 package com.example.kunda.aqiapp.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.kunda.aqiapp.AppExecutors;
 import com.example.kunda.aqiapp.BuildConfig;
@@ -35,6 +36,7 @@ public class AirQualityRepository {
     private static AirQualityRepository sInstance;
     private AppDatabase mDb;
     private AppExecutors executors;
+    private SharedPreferences sharedPreferences;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(Constants.BASE_URL_AERIS_API)
             .addConverterFactory(GsonConverterFactory.create())
@@ -55,6 +57,7 @@ public class AirQualityRepository {
     private AirQualityRepository(Context context) {
         mDb = InjectorUtils.provideAppDataBase(context);
         executors = InjectorUtils.provideAppExecutors();
+        sharedPreferences = InjectorUtils.provideSharedPreferences(context);
     }
 
     /**
@@ -143,14 +146,58 @@ public class AirQualityRepository {
      * saves the location data in local repository
      * @param locationData to be saved
      */
-    public void saveLocationData(LocationData locationData) {
-        mDb.locationDataDao().saveLocationData(locationData);
+    public void saveLocationData(final LocationData locationData) {
+        executors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.locationDataDao().saveLocationData(locationData);
+            }
+        });
+    }
+
+    /**
+     * updates the location data in local repository
+     * @param locationData to be updated
+     */
+    public void updateLocationData(final LocationData locationData) {
+        executors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.locationDataDao().updateLocationData(locationData);
+            }
+        });
+    }
+
+    public void saveHomeLocationData(final LocationData locationData){
+        final long[] id = new long[1];
+        executors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                id[0] =  mDb.locationDataDao().saveHomeLocation(locationData);
+                Timber.d("%s ", id[0]);
+                saveHomeLocationDataID(id[0]);
+            }
+        });
+    }
+
+    private void saveHomeLocationDataID(long locationID){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(Constants.HOME_LOCATION_DATA_ID,locationID);
+        editor.apply();
+    }
+
+    public long getHomeLocationDataID(){
+        Long homeLocationID;
+        homeLocationID = sharedPreferences.getLong(Constants.HOME_LOCATION_DATA_ID,0);
+        // Default value will be true on first app launch , when home fragment is opened by main activity then , this value will be set to false
+        return homeLocationID;
     }
 
     /**
      * This function will be called by a service to refresh data of all saved locations from data base
      */
     public void syncAllLocationsData() {
+        // no need to run in background thread , this function will be used by a service
         List<LocationData> listLocationData = mDb.locationDataDao().getLocationDataList();
 
         if (listLocationData != null) {
@@ -169,12 +216,7 @@ public class AirQualityRepository {
                         if ((response.body() != null ? response.body().getResponse() : null) != null) {
                             // update location data
                             locationData.setLocationAirQualityData(response.body().getResponse().get(Constants.BASE_INDEX));
-                            executors.diskIO().execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mDb.locationDataDao().updateLocationData(locationData);
-                                }
-                            });
+                            updateLocationData(locationData);
                         }
                     }
 

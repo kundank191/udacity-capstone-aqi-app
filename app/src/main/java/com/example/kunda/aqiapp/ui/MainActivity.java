@@ -14,6 +14,7 @@ import com.example.kunda.aqiapp.data.sync.SyncUtils;
 import com.example.kunda.aqiapp.ui.fragments.HomeFragment;
 import com.example.kunda.aqiapp.ui.fragments.PollutantsInfoFragment;
 import com.example.kunda.aqiapp.ui.fragments.SavedLocationsFragment;
+import com.example.kunda.aqiapp.ui.viewModel.MainViewModel;
 import com.example.kunda.aqiapp.utils.Constants;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,9 +27,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    private MainViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void init(){
         BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
+        viewModel = ViewModelProviders.of(this,InjectorUtils.provideMainViewModelFactory(this)).get(MainViewModel.class);
     }
 
     @Override
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.about_country:
-                Toast.makeText(this,"Your country",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getCountryDataFromPreferences(this),Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
@@ -108,5 +112,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         SharedPreferences.Editor editor = Objects.requireNonNull(context).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
         editor.putString(Constants.SAVED_COUNTRY_DATA, countryDataString);
         editor.apply();
+    }
+
+    private String getCountryDataFromPreferences(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE);
+        String countryData = sharedPreferences.getString(Constants.SAVED_COUNTRY_DATA,null);
+        viewModel.setCountryData(countryData);
+        return viewModel.getCountryData();
     }
 }
