@@ -186,11 +186,19 @@ public class AirQualityRepository {
         editor.apply();
     }
 
-    public long getHomeLocationDataID(){
+    private long getHomeLocationDataID(){
         Long homeLocationID;
         homeLocationID = sharedPreferences.getLong(Constants.HOME_LOCATION_DATA_ID,0);
         // Default value will be true on first app launch , when home fragment is opened by main activity then , this value will be set to false
         return homeLocationID;
+    }
+
+    /**
+     *
+     * @return home location data by using the home location data id saved in preferences
+     */
+    public LocationData getHomeLocationData(){
+        return mDb.locationDataDao().getLocationDataByID((int) getHomeLocationDataID());
     }
 
     /**

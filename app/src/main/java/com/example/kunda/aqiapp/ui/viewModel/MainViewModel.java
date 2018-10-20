@@ -21,6 +21,7 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel(AirQualityRepository appRepository) {
         this.repository = appRepository;
+        this.homeLocationData = repository.getHomeLocationData();
     }
 
     private String latitude;
@@ -29,6 +30,15 @@ public class MainViewModel extends ViewModel {
     private LiveData<CountryInfoResponse.RootObject> locationInfoResponse;
     private LiveData<IndicesResponse.RootObject> indicesInfoResponse;
     private String countryData = null;
+    private LocationData homeLocationData;
+
+    public LocationData getHomeLocationData(){
+        return homeLocationData;
+    }
+
+    public void setHomeLocationData(LocationData homeLocationData) {
+        this.homeLocationData = homeLocationData;
+    }
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
@@ -71,10 +81,6 @@ public class MainViewModel extends ViewModel {
 
     public void saveHomeLocationData(LocationData locationData){
         repository.saveHomeLocationData(locationData);
-    }
-
-    public long getHomeLocationDataID(){
-        return repository.getHomeLocationDataID();
     }
 
     public String getCountryData() {
