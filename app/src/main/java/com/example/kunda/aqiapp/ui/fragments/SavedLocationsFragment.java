@@ -44,7 +44,7 @@ import static com.example.kunda.aqiapp.utils.Constants.BASE_INDEX;
 /**
  * create an instance of this fragment.
  */
-public class SavedLocationsFragment extends Fragment {
+public class SavedLocationsFragment extends Fragment implements SavedLocationDataAdapter.MarkAsHomeLocationDataListener {
 
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private RecyclerView locationDataRV;
@@ -81,7 +81,7 @@ public class SavedLocationsFragment extends Fragment {
         mainViewModel.getSavedLocationDataList().observe(getActivity(), new Observer<List<LocationData>>() {
             @Override
             public void onChanged(List<LocationData> locationData) {
-                adapter = new SavedLocationDataAdapter(getContext(), locationData);
+                adapter = new SavedLocationDataAdapter(getFragment(), locationData);
                 locationDataRV.setAdapter(adapter);
             }
         });
@@ -136,7 +136,7 @@ public class SavedLocationsFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String locationName = input.getText().toString();
-                getLocationDataFromLatLng(locationName, place);
+                getLocationDataFromLatLng(locationName.trim(), place);
             }
         });
         alertDialog.show();
@@ -154,6 +154,17 @@ public class SavedLocationsFragment extends Fragment {
     private void saveLocationData(String placeName, AirQualityResponse.Response locationAirQualityData) {
         final LocationData locationData = new LocationData(placeName, locationAirQualityData);
         mainViewModel.saveNewLocationData(locationData);
+    }
+
+    @Override
+    public void markAsHomeLocationData(View view, LocationData locationData, int position) {
+        Timber.d("Hello");
         mainViewModel.saveHomeLocationData(locationData);
+        locationDataRV.scrollToPosition(position);
+        Toast.makeText(getActivity(),"Home location set to \"" + locationData.getLocationName() + "\"",Toast.LENGTH_SHORT).show();
+    }
+
+    private Fragment getFragment() {
+        return this;
     }
 }

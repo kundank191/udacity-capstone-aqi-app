@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kunda.aqiapp.R;
@@ -13,6 +14,7 @@ import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -25,6 +27,7 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         TextView locationNameTV;
         TextView locationDescriptionTV;
         TextView locationDetailsTV;
+        ImageView markAsHomeIV;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -32,15 +35,22 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
             locationNameTV = itemView.findViewById(R.id.tv_location_name);
             locationDescriptionTV = itemView.findViewById(R.id.tv_location_details);
             locationDetailsTV = itemView.findViewById(R.id.tv_location_more_details);
+            markAsHomeIV = itemView.findViewById(R.id.iv_mark_as_home);
         }
     }
 
     private List<LocationData> locationDataArrayList;
-    private Context context;
+    private Fragment fragment;
+    private MarkAsHomeLocationDataListener markAsHomeLocationDataListenerListener;
 
-    public SavedLocationDataAdapter(Context context, List<LocationData> locationDataArrayList){
-        this.context = context;
+    public SavedLocationDataAdapter(Fragment fragment, List<LocationData> locationDataArrayList){
+        this.fragment = fragment;
         this.locationDataArrayList = locationDataArrayList;
+        try {
+            markAsHomeLocationDataListenerListener = (MarkAsHomeLocationDataListener) fragment;
+        } catch (ClassCastException e){
+            throw  new ClassCastException("Must implement MarkAsHomeLocationDataListener " + e);
+        }
     }
 
     @NonNull
@@ -51,7 +61,7 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final  LocationData locationData = locationDataArrayList.get(position);
 
         holder.locationNameTV.setText(locationData.getLocationName());
@@ -77,6 +87,13 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         } catch (NullPointerException e){
             e.printStackTrace();
         }
+
+        holder.markAsHomeIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                markAsHomeLocationDataListenerListener.markAsHomeLocationData(view,locationData,position);
+            }
+        });
     }
 
     @Override
@@ -85,6 +102,14 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
     }
 
     public Context getContext() {
-        return context;
+        return fragment.getContext();
+    }
+
+    public Fragment getFragment() {
+        return fragment;
+    }
+
+    public interface MarkAsHomeLocationDataListener {
+        public void markAsHomeLocationData(View view, LocationData locationData,int position);
     }
 }

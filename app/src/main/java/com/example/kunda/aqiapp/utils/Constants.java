@@ -6,7 +6,7 @@ package com.example.kunda.aqiapp.utils;
 public class Constants {
 
     public static int BASE_INDEX = 0;
-    public static int SPLASH_TIME_OUT = 2000;
+    public static int SPLASH_TIME_OUT = 500;
     public static String BASE_URL_AERIS_API = "https://api.aerisapi.com";
     public static String SAVED_LOCATION_PREFS_FILE_NAME = "10123";
     public static String IS_FIRST_APP_LAUNCH_KEY = "first app launch";

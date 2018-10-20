@@ -51,18 +51,16 @@
             app:layout_constraintTop_toBottomOf="@id/tv_location_details"
             tools:text="Body text" />
 
-        <Button
-            android:id="@+id/button_go_somewhere"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        <!-- content description set dynamically -->
+        <ImageView
+            android:id="@+id/iv_mark_as_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/more_details"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_round_home"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_location_more_details" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

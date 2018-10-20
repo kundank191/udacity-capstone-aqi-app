@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment {
         if (PrefUtils.isFirstAppLaunch(Objects.requireNonNull(getContext()))) {
             firstTimeAppLaunch();
         } else {
-            setHomeLocationData();
+            showHomeLocationData();
         }
 
         return rootView;
@@ -129,13 +129,18 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void setHomeLocationData() {
-        if (mainViewModel.getHomeLocationData() != null) {
-            displayLocationData(mainViewModel.getHomeLocationData());
-        } else {
-            //TODO set some ui , which has a button which will ask user to show current location settings
-            checkPermissionForLocationThenGetLocation();
-        }
+    private void showHomeLocationData() {
+        InjectorUtils.provideAppExecutors().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                LocationData homeLocationData = mainViewModel.getHomeLocationData();
+                if (homeLocationData != null) {
+                    displayLocationData(homeLocationData);
+                } else {
+                    checkPermissionForLocationThenGetLocation();
+                }
+            }
+        });
     }
 
     /**
