@@ -29,10 +29,13 @@ public class MainViewModel extends ViewModel {
     private LiveData<CountryInfoResponse.RootObject> locationInfoResponse;
     private LiveData<IndicesResponse.RootObject> indicesInfoResponse;
     private String countryData = null;
+    private int savedLocationFragmentRVPosition = 0;
 
     public LocationData getHomeLocationData(){
         return repository.getHomeLocationData();
     }
+
+    public long getHomeLocationDataID() { return repository.getHomeLocationDataID();}
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
@@ -83,5 +86,13 @@ public class MainViewModel extends ViewModel {
 
     public void setCountryData(String countryData) {
         this.countryData = countryData;
+    }
+
+    public int getSavedLocationFragmentRVPosition() {
+        return savedLocationFragmentRVPosition;
+    }
+
+    public void setSavedLocationFragmentRVPosition(int position) {
+        this.savedLocationFragmentRVPosition = position;
     }
 }

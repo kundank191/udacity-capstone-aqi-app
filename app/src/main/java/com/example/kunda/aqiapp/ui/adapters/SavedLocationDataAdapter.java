@@ -41,11 +41,13 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
 
     private List<LocationData> locationDataArrayList;
     private Fragment fragment;
+    private long homeLocationId;
     private MarkAsHomeLocationDataListener markAsHomeLocationDataListenerListener;
 
-    public SavedLocationDataAdapter(Fragment fragment, List<LocationData> locationDataArrayList){
+    public SavedLocationDataAdapter(Fragment fragment, List<LocationData> locationDataArrayList, long homeLocationID){
         this.fragment = fragment;
         this.locationDataArrayList = locationDataArrayList;
+        this.homeLocationId = homeLocationID;
         try {
             markAsHomeLocationDataListenerListener = (MarkAsHomeLocationDataListener) fragment;
         } catch (ClassCastException e){
@@ -68,6 +70,10 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         AirQualityResponse.Loc loc = locationData.getLocationAirQualityData().getLoc();
         String location = " location " + loc.getLat() + " : " + loc.getLongitude();
         holder.locationDescriptionTV.setText(location);
+        // If the location data is home its icon will be colored
+        if (locationData.getLocationID() == homeLocationId) {
+            holder.markAsHomeIV.setImageResource(R.drawable.ic_round_home_colored);
+        }
 
         try {
 

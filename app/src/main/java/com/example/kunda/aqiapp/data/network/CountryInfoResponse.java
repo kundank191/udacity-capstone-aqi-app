@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Kundan on 22-09-2018.
  */
-public class LocationInfoResponse {
+public class CountryInfoResponse {
 
     public class RootObject
     {

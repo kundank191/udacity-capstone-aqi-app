@@ -20,7 +20,7 @@ public interface AerisApiService {
     @GET("airquality/{lat},{long}")
     Call<AirQualityResponse.RootObject> getAirQualityData(@Path(PATH_LATITUDE) String lat, @Path(PATH_LONGITUDE) String lang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
     @GET("countries")
-    Call<LocationInfoResponse.RootObject> getLocation(@Query(PARAM_POINT_LOCATION) String latLang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
+    Call<CountryInfoResponse.RootObject> getCountryInfo(@Query(PARAM_POINT_LOCATION) String latLang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
     @GET("indices/{indicesType}/55403")
     Call<IndicesResponse.RootObject> getIndicesInfo(@Path(PATH_INDICES_TYPE) String indicesType, @Query(PARAM_POINT_LOCATION) String latLang, @Query(PARAM_CLIENT_ID) String id, @Query(PARAM_CLIENT_SECRET_ID) String secretId);
 

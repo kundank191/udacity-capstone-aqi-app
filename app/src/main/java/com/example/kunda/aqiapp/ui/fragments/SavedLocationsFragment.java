@@ -81,8 +81,9 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         mainViewModel.getSavedLocationDataList().observe(getActivity(), new Observer<List<LocationData>>() {
             @Override
             public void onChanged(List<LocationData> locationData) {
-                adapter = new SavedLocationDataAdapter(getFragment(), locationData);
+                adapter = new SavedLocationDataAdapter(getFragment(), locationData,mainViewModel.getHomeLocationDataID());
                 locationDataRV.setAdapter(adapter);
+                locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
             }
         });
     }
@@ -160,7 +161,8 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
     public void markAsHomeLocationData(View view, LocationData locationData, int position) {
         Timber.d("Hello");
         mainViewModel.saveHomeLocationData(locationData);
-        locationDataRV.scrollToPosition(position);
+        mainViewModel.setSavedLocationFragmentRVPosition(position);
+        locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
         Toast.makeText(getActivity(),"Home location set to \"" + locationData.getLocationName() + "\"",Toast.LENGTH_SHORT).show();
     }
 
