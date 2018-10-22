@@ -44,27 +44,27 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
     private long homeLocationId;
     private MarkAsHomeLocationDataListener markAsHomeLocationDataListenerListener;
 
-    public SavedLocationDataAdapter(Fragment fragment, List<LocationData> locationDataArrayList, long homeLocationID){
+    public SavedLocationDataAdapter(Fragment fragment, List<LocationData> locationDataArrayList, long homeLocationID) {
         this.fragment = fragment;
         this.locationDataArrayList = locationDataArrayList;
         this.homeLocationId = homeLocationID;
         try {
             markAsHomeLocationDataListenerListener = (MarkAsHomeLocationDataListener) fragment;
-        } catch (ClassCastException e){
-            throw  new ClassCastException("Must implement MarkAsHomeLocationDataListener " + e);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Must implement MarkAsHomeLocationDataListener " + e);
         }
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(getContext()).inflate(R.layout.saved_location_data_row_item,parent,false);
+        View itemView = LayoutInflater.from(getContext()).inflate(R.layout.saved_location_data_row_item, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final  LocationData locationData = locationDataArrayList.get(position);
+        final LocationData locationData = locationDataArrayList.get(position);
 
         holder.locationNameTV.setText(locationData.getLocationName());
         AirQualityResponse.Loc loc = locationData.getLocationAirQualityData().getLoc();
@@ -90,21 +90,32 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
             String country = place.getCountry();
 
             holder.locationDetailsTV.setText(String.format("%s \n %s \n %s \n %s \n %s \n %s \n %s \n %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
         holder.markAsHomeIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                markAsHomeLocationDataListenerListener.markAsHomeLocationData(view,locationData,position);
+                markAsHomeLocationDataListenerListener.markAsHomeLocationData(view, locationData, position);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return locationDataArrayList.size();
+        if (locationDataArrayList != null)
+            return locationDataArrayList.size();
+        return 0;
+    }
+
+    public List<LocationData> getLocationDataArrayList() {
+        return locationDataArrayList;
+    }
+
+    public void setLocationDataList(List<LocationData> locationDataArrayList) {
+        this.locationDataArrayList = locationDataArrayList;
+        notifyDataSetChanged();
     }
 
     public Context getContext() {
@@ -116,6 +127,6 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
     }
 
     public interface MarkAsHomeLocationDataListener {
-        public void markAsHomeLocationData(View view, LocationData locationData,int position);
+        public void markAsHomeLocationData(View view, LocationData locationData, int position);
     }
 }

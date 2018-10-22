@@ -78,11 +78,12 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
+        adapter = new SavedLocationDataAdapter(getFragment(),null,mainViewModel.getHomeLocationDataID());
+        locationDataRV.setAdapter(adapter);
         mainViewModel.getSavedLocationDataList().observe(getActivity(), new Observer<List<LocationData>>() {
             @Override
             public void onChanged(List<LocationData> locationData) {
-                adapter = new SavedLocationDataAdapter(getFragment(), locationData,mainViewModel.getHomeLocationDataID());
-                locationDataRV.setAdapter(adapter);
+                adapter.setLocationDataList(locationData);
                 locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
             }
         });
