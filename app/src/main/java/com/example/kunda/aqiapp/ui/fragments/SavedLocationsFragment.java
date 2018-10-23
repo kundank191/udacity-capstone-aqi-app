@@ -163,7 +163,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         Timber.d("Hello");
         mainViewModel.saveHomeLocationData(locationData);
         mainViewModel.setSavedLocationFragmentRVPosition(position);
-        locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
+       // locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
         Toast.makeText(getActivity(),"Home location set to \"" + locationData.getLocationName() + "\"",Toast.LENGTH_SHORT).show();
     }
 

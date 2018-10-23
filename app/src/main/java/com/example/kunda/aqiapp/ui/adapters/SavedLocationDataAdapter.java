@@ -22,6 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocationDataAdapter.ViewHolder> {
 
+    private ImageView lastHome = null;
+    private static int lastSelectedPosition = 0;
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView locationNameTV;
@@ -63,7 +66,7 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final LocationData locationData = locationDataArrayList.get(position);
 
         holder.locationNameTV.setText(locationData.getLocationName());
@@ -73,6 +76,8 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         // If the location data is home its icon will be colored
         if (locationData.getLocationID() == homeLocationId) {
             holder.markAsHomeIV.setImageResource(R.drawable.ic_round_home_colored);
+            lastHome = holder.markAsHomeIV;
+            lastSelectedPosition = position;
         }
 
         try {
@@ -97,7 +102,14 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         holder.markAsHomeIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                holder.markAsHomeIV.setImageResource(R.drawable.ic_round_home_colored);
+                setHomeLocationId(locationData.getLocationID());
                 markAsHomeLocationDataListenerListener.markAsHomeLocationData(view, locationData, position);
+                if (lastHome != null) {
+                    lastHome.setImageResource(R.drawable.ic_round_home);
+                    lastHome = holder.markAsHomeIV;
+                    lastSelectedPosition = position;
+                }
             }
         });
     }
@@ -118,6 +130,10 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         notifyDataSetChanged();
     }
 
+    public void setHomeLocationId(int homeLocationId) {
+        this.homeLocationId = homeLocationId;
+    }
+
     public Context getContext() {
         return fragment.getContext();
     }
@@ -127,6 +143,6 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
     }
 
     public interface MarkAsHomeLocationDataListener {
-        public void markAsHomeLocationData(View view, LocationData locationData, int position);
+        void markAsHomeLocationData(View view, LocationData locationData, int position);
     }
 }
