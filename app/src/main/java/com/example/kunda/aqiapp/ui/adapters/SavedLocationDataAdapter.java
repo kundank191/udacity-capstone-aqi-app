@@ -1,6 +1,8 @@
 package com.example.kunda.aqiapp.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +33,15 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         TextView locationDescriptionTV;
         TextView locationDetailsTV;
         ImageView markAsHomeIV;
+        TextView placeAqiIndexTV;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             locationNameTV = itemView.findViewById(R.id.tv_location_name);
             locationDescriptionTV = itemView.findViewById(R.id.tv_location_details);
-            locationDetailsTV = itemView.findViewById(R.id.tv_location_more_details);
             markAsHomeIV = itemView.findViewById(R.id.iv_mark_as_home);
+            placeAqiIndexTV = itemView.findViewById(R.id.fab_place_aqi_index);
         }
     }
 
@@ -92,9 +95,16 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
             String timeUpdated = airQualityInfo.getDateTimeISO();
             String methodMeasured = airQualityInfo.getMethod();
             String placeName = place.getName();
+            placeName = getFormattedPlaceName(placeName);
             String country = place.getCountry();
 
-            holder.locationDetailsTV.setText(String.format("%s \n %s \n %s \n %s \n %s \n %s \n %s \n %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
+            holder.placeAqiIndexTV.setText(aqiIndexLocation);
+            GradientDrawable priorityCircle = (GradientDrawable) holder.placeAqiIndexTV.getBackground();
+            // Get the appropriate background color based on the priority
+            String priorityColor = "#" + color;
+            priorityCircle.setColor(Color.parseColor(priorityColor));
+
+            holder.locationDescriptionTV.setText(String.format("%s, %s", placeName, country));
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -144,5 +154,9 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
 
     public interface MarkAsHomeLocationDataListener {
         void markAsHomeLocationData(View view, LocationData locationData, int position);
+    }
+
+    private String getFormattedPlaceName(String name){
+        return name.substring(0,1).toUpperCase() + name.substring(1);
     }
 }
