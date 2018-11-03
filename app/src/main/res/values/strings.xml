@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">AQI app</string>
+    <string name="saved_location_title">Saved locations</string>
+    <string name="pollutants_title">Pollutants</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -39,7 +41,7 @@
 
     <!-- About Pollutants -->
     <string name="pollutant_co_name" translatable="false">CO</string>
-    <string name="pollutant_co_subtitle">Carbon Dioxide</string>
+    <string name="pollutant_co_subtitle">Carbon Monoxide</string>
     <string name="pollutant_co_description">CO is an odorless, colorless gas formed by incomplete combustion of carbon in fuel. The main source is motor vehicle exhaust, along with industrial processes and biomass burning. Carbon monoxide binds to hemoglobin in red blood cells, reducing their ability to transport and release oxygen throughout the body. Low exposures can aggravate cardiac ailments, while high exposures cause central nervous system impairment or death. It also plays a role in the generation of ground-level ozone.</string>
     <string name="pollutant_co_details_link" translatable="false">https://www.environment.gov.au/protection/publications/factsheet-carbon-monoxide-co</string>
 

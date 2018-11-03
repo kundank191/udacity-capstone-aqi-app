@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         init();
 
         AirQualityRepository repository = InjectorUtils.getAirQualityRepository(this);
-
+        // Initialize firebase job dispatcher
         SyncUtils.initializeSync(this);
 
         repository.getCountryData("23.4306","85.4154").observe(this, new Observer<CountryInfoResponse.RootObject>() {
@@ -66,12 +66,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (menuItem.getItemId()) {
             case R.id.navigation_home:
                 fragment = new HomeFragment();
+                setTitle(R.string.app_name);
                 break;
             case R.id.navigation_list_places:
                 fragment = new SavedLocationsFragment();
+                setTitle(R.string.saved_location_title);
                 break;
             case R.id.navigation_about_pollutants:
                 fragment = new PollutantsInfoFragment();
+                setTitle(R.string.pollutants_title);
                 break;
         }
         setFragment(fragment);
