@@ -109,12 +109,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void saveCountryInfoInPreferences(Context context, CountryInfoResponse.RootObject countryInfo){
-        CountryInfoResponse.Response countryData = countryInfo.getResponse();
-        Gson gson = new Gson();
-        String countryDataString = gson.toJson(countryData);
-        SharedPreferences.Editor editor = Objects.requireNonNull(context).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
-        editor.putString(Constants.SAVED_COUNTRY_DATA, countryDataString);
-        editor.apply();
+        if ( countryInfo != null) {
+            CountryInfoResponse.Response countryData = countryInfo.getResponse();
+            Gson gson = new Gson();
+            String countryDataString = gson.toJson(countryData);
+            SharedPreferences.Editor editor = Objects.requireNonNull(context).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
+            editor.putString(Constants.SAVED_COUNTRY_DATA, countryDataString);
+            editor.apply();
+        }
     }
 
     private String getCountryDataFromPreferences(Context context){

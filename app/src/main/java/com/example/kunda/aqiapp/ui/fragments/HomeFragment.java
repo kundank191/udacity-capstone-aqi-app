@@ -178,7 +178,11 @@ public class HomeFragment extends Fragment {
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                getLocationDataFromNetwork(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                if (location != null) {
+                    getLocationDataFromNetwork(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                } else {
+                    Toast.makeText(getContext(),R.string.location_null_error,Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
