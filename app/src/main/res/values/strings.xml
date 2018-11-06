@@ -28,6 +28,7 @@
 
     <!-- Home fragment -->
     <string name="current_location">Current Location</string>
+    <string name="location_null_error">Error getting location data!</string>
 
     <!-- Bottom nav bar -->
     <string name="title_home">Home</string>
@@ -72,4 +73,5 @@
     <string name="open_details_of_pollutant">Open details</string>
     <string name="more_details">More Details</string>
     <string name="main_menu_about_location">About Location</string>
+    <string name="error_getting_data">Error getting place data</string>
 </resources>

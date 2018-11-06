@@ -151,7 +151,11 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         mainViewModel.getAirQualityResponse(String.valueOf(place.getLatLng().latitude), String.valueOf(place.getLatLng().longitude)).observe(getActivity(), new Observer<AirQualityResponse.RootObject>() {
             @Override
             public void onChanged(AirQualityResponse.RootObject rootObject) {
-                saveLocationData(placeName, rootObject.getResponse().get(BASE_INDEX));
+                if (rootObject != null) {
+                    saveLocationData(placeName, rootObject.getResponse().get(BASE_INDEX));
+                } else {
+                    Toast.makeText(getContext(),R.string.error_getting_data,Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

@@ -116,6 +116,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // Main activity will be called with an intent , which tells that it is the first time the app has been launched
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     //  viewpager change listener
