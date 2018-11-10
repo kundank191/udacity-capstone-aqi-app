@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
                     // display home location
                     displayLocationData(locationData);
                 } else {
-                    Toast.makeText(getActivity(), "Error getting data from internet", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.network_data_null, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -213,7 +213,7 @@ public class HomeFragment extends Fragment {
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(getActivity(), "Permission denied to access location", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.location_permission_denied, Toast.LENGTH_SHORT).show();
                 }
             }
         }
