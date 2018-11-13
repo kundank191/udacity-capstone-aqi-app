@@ -37,6 +37,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
+    implementation 'com.afollestad.material-dialogs:input:2.0.0-beta5'
     // Networking
     implementation 'com.firebase:firebase-jobdispatcher:0.7.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
