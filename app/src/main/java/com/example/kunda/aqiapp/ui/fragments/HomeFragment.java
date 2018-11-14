@@ -3,6 +3,7 @@ package com.example.kunda.aqiapp.ui.fragments;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import com.example.kunda.aqiapp.ui.adapters.PollutantsAdapter;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModel;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModelFactory;
+import com.example.kunda.aqiapp.utils.ColorUtils;
+import com.example.kunda.aqiapp.utils.Constants;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
 import com.example.kunda.aqiapp.utils.PrefUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -46,6 +49,9 @@ public class HomeFragment extends Fragment {
     private final int LOCATION_PERMISSION_CODE = 101;
 
     private TextView textView;
+    private TextView locationNameTV;
+    private TextView dominantPollutionTV;
+    private View ringView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -67,6 +73,9 @@ public class HomeFragment extends Fragment {
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
         textView = rootView.findViewById(R.id.api_index_tv);
+        locationNameTV = rootView.findViewById(R.id.tv_home_location);
+        dominantPollutionTV = rootView.findViewById(R.id.tv_dominant_pollutant);
+        ringView = rootView.findViewById(R.id.ring_view);
 
         // Is only required for the first time when app is launched
         if (PrefUtils.isFirstAppLaunch(Objects.requireNonNull(getContext()))) {
@@ -85,14 +94,12 @@ public class HomeFragment extends Fragment {
     private void displayLocationData(final LocationData locationData) {
         pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(locationData));
         pollutantsDataRV.setAdapter(pollutantsAdapter);
-//        GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-//        snapHelper.attachToRecyclerView(pollutantsDataRV);
 
         AirQualityResponse.Place place = locationData.getLocationAirQualityData().getPlace();
         AirQualityResponse.Period airQualityInfo = locationData.getLocationAirQualityData().getPeriods().get(BASE_INDEX);
 
         String dominantPollutant = airQualityInfo.getDominant();
-        String aqiIndexLocation = String.valueOf(airQualityInfo.getAqi());
+        String aqiIndex = String.valueOf(airQualityInfo.getAqi());
         String airQuality = airQualityInfo.getCategory();
         String color = airQualityInfo.getColor();
         String timeUpdated = airQualityInfo.getDateTimeISO();
@@ -100,8 +107,12 @@ public class HomeFragment extends Fragment {
         String placeName = place.getName();
         String country = place.getCountry();
 
-        textView.setText(String.format("%s \n %s \n %s \n %s \n %s \n %s \n %s \n %s", dominantPollutant, aqiIndexLocation, airQuality, color, timeUpdated, methodMeasured, placeName, country));
+        locationNameTV.setText(String.format("%s (%s, %s)",locationData.getLocationName(), placeName, country));
+        dominantPollutionTV.setText(String.format(getString(R.string.dominant_pollutant), dominantPollutant));
+        textView.setText(String.format("%s\n%s", aqiIndex, airQuality));
 
+        GradientDrawable drawable = (GradientDrawable) ringView.getBackground();
+        drawable.setStroke(Constants.AQI_INDEX_STROKE_WIDTH,ColorUtils.getColor(color));
     }
 
     /**

@@ -51,6 +51,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
     private RecyclerView locationDataRV;
     private SavedLocationDataAdapter adapter;
     private MainViewModel mainViewModel;
+    private long homeLocationDataID;
 
     public SavedLocationsFragment() {
         // Required empty public constructor
@@ -80,8 +81,8 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
     private void init() {
         MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
-
-        adapter = new SavedLocationDataAdapter(getFragment(),null,mainViewModel.getHomeLocationDataID());
+        homeLocationDataID = mainViewModel.getHomeLocationDataID();
+        adapter = new SavedLocationDataAdapter(getFragment(),null,homeLocationDataID);
         locationDataRV.setAdapter(adapter);
         mainViewModel.getSavedLocationDataList().observe(getActivity(), new Observer<List<LocationData>>() {
             @Override
@@ -125,6 +126,8 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    // TODO select any one of the function
+
     private void getLocationNameFromDialogBox(final Place place) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
         alertDialog.setTitle("Add Location");
@@ -146,6 +149,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         });
         alertDialog.show();
     }
+
 
     private void getLocationDataFromLatLng(final String placeName, final Place place) {
         mainViewModel.getAirQualityResponse(String.valueOf(place.getLatLng().latitude), String.valueOf(place.getLatLng().longitude)).observe(getActivity(), new Observer<AirQualityResponse.RootObject>() {
@@ -169,6 +173,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
     public void markAsHomeLocationData(View view, LocationData locationData, int position) {
         Timber.d("Hello");
         mainViewModel.saveHomeLocationData(locationData);
+        homeLocationDataID = locationData.getLocationID();
         mainViewModel.setSavedLocationFragmentRVPosition(position);
        // locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
         Toast.makeText(getActivity(),"Home location set to \"" + locationData.getLocationName() + "\"",Toast.LENGTH_SHORT).show();

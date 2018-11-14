@@ -1,7 +1,6 @@
 package com.example.kunda.aqiapp.ui.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
+import com.example.kunda.aqiapp.utils.ColorUtils;
+import com.example.kunda.aqiapp.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -60,14 +61,13 @@ public class PollutantsAdapter extends RecyclerView.Adapter<PollutantsAdapter.Vi
         final AirQualityResponse.Pollutant pollutant = airQualityData.get(position);
         holder.pollutantNameTV.setText(pollutant.getName());
         holder.pollutantTitleTV.setText(pollutant.getType());
-        holder.pollutantUgmTV.setText("UGM");
-        holder.pollutantPpbTV.setText("PPB");
+        holder.pollutantUgmTV.setText(String.format("Density  : %s ug/m3", pollutant.getValueUGM3()));
+        holder.pollutantPpbTV.setText(String.format("Quantity : %s PPB", pollutant.getValuePPB()));
         holder.pollutantAqiTV.setText(String.valueOf(pollutant.getAqi()));
 
         GradientDrawable priorityCircle = (GradientDrawable) holder.pollutantAqiTV.getBackground();
         // Get the appropriate background color based on the priority
-        String priorityColor = "#" + pollutant.getColor();
-        priorityCircle.setColor(Color.parseColor(priorityColor));
+        priorityCircle.setStroke(Constants.POLLUTANT_INDEX_STROKE_WIDTH,ColorUtils.getColor(pollutant.getColor()));
     }
 
     @Override

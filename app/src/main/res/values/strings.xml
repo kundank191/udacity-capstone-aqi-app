@@ -74,4 +74,7 @@
     <string name="more_details">More Details</string>
     <string name="main_menu_about_location">About Location</string>
     <string name="error_getting_data">Error getting place data</string>
+    <string name="location_permission_denied">Permission denied to access location</string>
+    <string name="network_data_null">Error getting data from internet</string>
+    <string name="dominant_pollutant">Dominant pollutant : %s</string>
 </resources>

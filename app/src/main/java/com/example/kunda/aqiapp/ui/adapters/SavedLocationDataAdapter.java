@@ -1,7 +1,6 @@
 package com.example.kunda.aqiapp.ui.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.TextView;
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.database.LocationData;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
+import com.example.kunda.aqiapp.utils.ColorUtils;
+import com.example.kunda.aqiapp.utils.Constants;
 
 import java.util.List;
 
@@ -25,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocationDataAdapter.ViewHolder> {
 
     private ImageView lastHome = null;
-    private static int lastSelectedPosition = 0;
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -80,7 +80,8 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         if (locationData.getLocationID() == homeLocationId) {
             holder.markAsHomeIV.setImageResource(R.drawable.ic_round_home_colored);
             lastHome = holder.markAsHomeIV;
-            lastSelectedPosition = position;
+        } else {
+            holder.markAsHomeIV.setImageResource(R.drawable.ic_round_home);
         }
 
         try {
@@ -101,8 +102,7 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
             holder.placeAqiIndexTV.setText(aqiIndexLocation);
             GradientDrawable priorityCircle = (GradientDrawable) holder.placeAqiIndexTV.getBackground();
             // Get the appropriate background color based on the priority
-            String priorityColor = "#" + color;
-            priorityCircle.setColor(Color.parseColor(priorityColor));
+            priorityCircle.setStroke(Constants.POLLUTANT_INDEX_STROKE_WIDTH,ColorUtils.getColor(color));
 
             holder.locationDescriptionTV.setText(String.format("%s, %s", placeName, country));
         } catch (NullPointerException e) {
@@ -117,9 +117,9 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
                 markAsHomeLocationDataListenerListener.markAsHomeLocationData(view, locationData, position);
                 if (lastHome != null) {
                     lastHome.setImageResource(R.drawable.ic_round_home);
-                    lastHome = holder.markAsHomeIV;
-                    lastSelectedPosition = position;
                 }
+                lastHome = holder.markAsHomeIV;
+                notifyDataSetChanged();
             }
         });
     }

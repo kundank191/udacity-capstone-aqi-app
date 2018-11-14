@@ -6,25 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.HomeFragment">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <View
+        android:id="@+id/ring_view"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/circle_shape"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="80"
-        android:progressDrawable="@drawable/circular_progress_bar"
-        app:layout_constraintBottom_toTopOf="@+id/tv_dominant_pollutant"
+        android:background="@drawable/ring_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.064" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/api_index_tv"
@@ -33,10 +25,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
-        app:layout_constraintEnd_toEndOf="@+id/progressBar"
-        app:layout_constraintStart_toStartOf="@+id/progressBar"
-        app:layout_constraintTop_toTopOf="@+id/progressBar" />
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/ring_view"
+        app:layout_constraintEnd_toEndOf="@+id/ring_view"
+        app:layout_constraintStart_toStartOf="@+id/ring_view"
+        app:layout_constraintTop_toTopOf="@+id/ring_view" />
 
     <TextView
         android:id="@+id/tv_dominant_pollutant"
@@ -61,6 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Location" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_pollutants"
         android:layout_width="match_parent"
