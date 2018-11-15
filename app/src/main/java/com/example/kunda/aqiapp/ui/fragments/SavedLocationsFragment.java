@@ -50,6 +50,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private RecyclerView locationDataRV;
     private SavedLocationDataAdapter adapter;
+    private FloatingActionButton fab;
     private MainViewModel mainViewModel;
     private long homeLocationDataID;
 
@@ -67,8 +68,8 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         locationDataRV.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         locationDataRV.addItemDecoration(dividerItemDecoration);
-        FloatingActionButton button = rootView.findViewById(R.id.fab_add_place);
-        button.setOnClickListener(new View.OnClickListener() {
+        fab = rootView.findViewById(R.id.fab_add_place);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addNewPlace();
@@ -89,6 +90,21 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
             public void onChanged(List<LocationData> locationData) {
                 adapter.setLocationDataList(locationData);
                 locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
+            }
+        });
+        /*
+          When the recycler view is scrolled down then the fab will be hidden.
+          When the recycler view is scrolled up the fab will be shown.
+         */
+        locationDataRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if ( dy > 0) {
+                    fab.hide();
+                } else {
+                    fab.show();
+                }
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }

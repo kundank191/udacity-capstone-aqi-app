@@ -2,6 +2,8 @@ package com.example.kunda.aqiapp.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +27,7 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -92,7 +95,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.about_country:
+                // TODO do something about the country data
                 Toast.makeText(this,getCountryDataFromPreferences(this),Toast.LENGTH_SHORT).show();
+
+                final String url = getResources().getString(R.string.aqi_color_guide);
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                builder.setToolbarColor(Color.parseColor("#2196F3"));
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(this, Uri.parse(url));
+
                 break;
         }
         return true;

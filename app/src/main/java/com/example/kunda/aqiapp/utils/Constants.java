@@ -7,7 +7,7 @@ public class Constants {
 
     public static int BASE_INDEX = 0;
     public static int SPLASH_TIME_OUT = 500;
-    public static int POLLUTANT_INDEX_STROKE_WIDTH = 5;
+    public static int POLLUTANT_INDEX_STROKE_WIDTH = 2;
     public static int AQI_INDEX_STROKE_WIDTH = 5;
     public static String BASE_URL_AERIS_API = "https://api.aerisapi.com";
     public static String SAVED_LOCATION_PREFS_FILE_NAME = "10123";
