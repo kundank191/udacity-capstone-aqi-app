@@ -30,6 +30,7 @@
 
         <service android:name=".data.sync.SyncLocationDataService" />
         <service android:name=".data.sync.SyncDataFirebaseService" />
+        <service android:name=".ui.widget.HomeLocationDataWidgetService" />
     </application>
 
 </manifest>
