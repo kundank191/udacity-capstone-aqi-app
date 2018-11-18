@@ -3,21 +3,31 @@ package com.example.kunda.aqiapp.ui.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.example.kunda.aqiapp.R;
+import com.example.kunda.aqiapp.data.AirQualityRepository;
+import com.example.kunda.aqiapp.data.database.LocationData;
+import com.example.kunda.aqiapp.utils.InjectorUtils;
 
 /**
- * Created by Kundan on 16-11-2018.
+ * Implementation of App Widget functionality.
  */
-public class HomeLocationDataWidget extends AppWidgetProvider {
+public class HomeDataAppWidget extends AppWidgetProvider {
 
-    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                        int appWidgetId) {
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                int appWidgetId) {
 
-        Intent intent = getIngredientServiceIntent(context);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.home_data_widget);
+        // Get the data to be shown in the widget.
+        AirQualityRepository repository = InjectorUtils.provideAirQualityRepository(context);
+        LocationData homeLocationData = repository.getHomeLocationData();
+        String text = "some Default Text";
+        if (homeLocationData != null) {
+            text = homeLocationData.getLocationName();
+        }
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+        views.setTextViewText(R.id.appwidget_text, text);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -40,12 +50,5 @@ public class HomeLocationDataWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
     }
-
-    /**
-     * @param context of the application
-     * @return and intent which will start IngredientWidgetService
-     */
-    public static Intent getIngredientServiceIntent(Context context) {
-        return new Intent(context, HomeLocationDataWidgetService.class);
-    }
 }
+
