@@ -25,12 +25,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.WelcomeActivity"
-            android:theme="@style/AppThemeNoTitle"></activity>
+        <activity
+            android:name=".ui.WelcomeActivity"
+            android:theme="@style/AppThemeNoTitle" />
 
         <service android:name=".data.sync.SyncLocationDataService" />
         <service android:name=".data.sync.SyncDataFirebaseService" />
-        <service android:name=".ui.widget.HomeLocationDataWidgetService" />
+
+        <receiver android:name=".ui.widget.HomeDataAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/new_app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
