@@ -17,7 +17,7 @@ public class HomeDataAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, LocationData homeLocationData) {
 
-        String text = "some Default Text";
+        String text = context.getString(R.string.widget_empty_text);
         if (homeLocationData != null) {
             text = homeLocationData.getLocationName();
         }
@@ -31,12 +31,13 @@ public class HomeDataAppWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
+        // Get the data from the repository
         InjectorUtils.provideAppExecutors().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 LocationData homeLocationData = InjectorUtils.provideAirQualityRepository(context).getHomeLocationData();
                 for (int appWidgetId : appWidgetIds) {
+                    // There may be multiple widgets active, so update all of them
                     updateAppWidget(context, appWidgetManager, appWidgetId,homeLocationData);
                 }
             }
