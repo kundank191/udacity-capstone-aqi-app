@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment, Initialize views
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         pollutantsDataRV = rootView.findViewById(R.id.rv_pollutants);
-       //Initialize viewModelFactory and viewModel
+        //Initialize viewModelFactory and viewModel
         MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
@@ -107,12 +107,12 @@ public class HomeFragment extends Fragment {
         String placeName = place.getName();
         String country = place.getCountry();
 
-        locationNameTV.setText(String.format("%s (%s, %s)",locationData.getLocationName(), placeName, country));
+        locationNameTV.setText(String.format("%s (%s, %s)", locationData.getLocationName(), placeName, country));
         dominantPollutionTV.setText(String.format(getString(R.string.dominant_pollutant), dominantPollutant));
         textView.setText(String.format("%s\n%s", aqiIndex, airQuality));
 
         GradientDrawable drawable = (GradientDrawable) ringView.getBackground();
-        drawable.setStroke(Constants.AQI_INDEX_STROKE_WIDTH,ColorUtils.getColor(color));
+        drawable.setStroke(Constants.AQI_INDEX_STROKE_WIDTH, ColorUtils.getColor(color));
     }
 
     /**
@@ -142,9 +142,15 @@ public class HomeFragment extends Fragment {
         InjectorUtils.provideAppExecutors().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                LocationData homeLocationData = mainViewModel.getHomeLocationData();
+                final LocationData homeLocationData = mainViewModel.getHomeLocationData();
                 if (homeLocationData != null) {
-                    displayLocationData(homeLocationData);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayLocationData(homeLocationData);
+                        }
+                    });
                 } else {
                     checkPermissionForLocationThenGetLocation();
                 }
@@ -192,7 +198,7 @@ public class HomeFragment extends Fragment {
                 if (location != null) {
                     getLocationDataFromNetwork(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 } else {
-                    Toast.makeText(getContext(),R.string.location_null_error,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.location_null_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });

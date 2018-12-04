@@ -33,7 +33,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import timber.log.Timber;
@@ -66,8 +65,6 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
 
         locationDataRV = rootView.findViewById(R.id.rv_saved_location_data);
         locationDataRV.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
-        locationDataRV.addItemDecoration(dividerItemDecoration);
         fab = rootView.findViewById(R.id.fab_add_place);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
