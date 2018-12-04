@@ -14,14 +14,14 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
-    <string name="slide_1_title">Title 1!</string>
-    <string name="slide_1_desc">Title one Title one Title one!</string>
+    <string name="slide_1_title">Know your Air!</string>
+    <string name="slide_1_desc">Get daily updates on your Location\'s Air Quality</string>
 
-    <string name="slide_2_title">Movie Tickets</string>
-    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
+    <string name="slide_2_title">Save favourite locations</string>
+    <string name="slide_2_desc">Add multiple locations to your list and get their air quality data</string>
 
-    <string name="slide_3_title">Great Discounts</string>
-    <string name="slide_3_desc">Best discounts on every single service we offer!</string>
+    <string name="slide_3_title">Learn more !</string>
+    <string name="slide_3_desc">Learn more about pollutants and how they affect you</string>
 
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
@@ -38,7 +38,7 @@
     <string name="about_pollutants">Pollutants</string>
 
     <!-- Location fragment -->
-    <string name="aqi_color_guide">https://webcam.srs.fs.fed.us/test/AQI.shtml</string>
+    <string name="aqi_color_guide" translatable="false">https://webcam.srs.fs.fed.us/test/AQI.shtml</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -80,4 +80,9 @@
     <string name="location_permission_denied">Permission denied to access location</string>
     <string name="network_data_null">Error getting data from internet</string>
     <string name="dominant_pollutant">Dominant pollutant : %s</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_empty_text">Your home location data will be shown here</string>
+    <string name="widget_text_air_quality">Air Quality</string>
+    <string name="widget_no_home_location">No Saved Home Location</string>
 </resources>
