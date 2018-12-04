@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -52,6 +54,9 @@ public class HomeFragment extends Fragment {
     private TextView locationNameTV;
     private TextView dominantPollutionTV;
     private View ringView;
+    private Group mainView;
+    private TextView emptyStateView;
+    private ProgressBar loadingView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,6 +73,9 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment, Initialize views
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         pollutantsDataRV = rootView.findViewById(R.id.rv_pollutants);
+        mainView = rootView.findViewById(R.id.home_fragment_main_view);
+        emptyStateView = rootView.findViewById(R.id.home_fragment_empty_state);
+        loadingView = rootView.findViewById(R.id.home_fragment_loading_view);
         //Initialize viewModelFactory and viewModel
         MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
@@ -76,6 +84,9 @@ public class HomeFragment extends Fragment {
         locationNameTV = rootView.findViewById(R.id.tv_home_location);
         dominantPollutionTV = rootView.findViewById(R.id.tv_dominant_pollutant);
         ringView = rootView.findViewById(R.id.ring_view);
+
+        // Loading ui will be shown before loading any dara
+        showLoadingUI();
 
         // Is only required for the first time when app is launched
         if (PrefUtils.isFirstAppLaunch(Objects.requireNonNull(getContext()))) {
@@ -92,27 +103,34 @@ public class HomeFragment extends Fragment {
      *                     this function displays the data on the screen
      */
     private void displayLocationData(final LocationData locationData) {
-        pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(locationData));
-        pollutantsDataRV.setAdapter(pollutantsAdapter);
+        if (locationData != null) {
+            // Show main UI
+            showMainUI();
+            pollutantsAdapter = new PollutantsAdapter(getContext(), getPollutants(locationData));
+            pollutantsDataRV.setAdapter(pollutantsAdapter);
 
-        AirQualityResponse.Place place = locationData.getLocationAirQualityData().getPlace();
-        AirQualityResponse.Period airQualityInfo = locationData.getLocationAirQualityData().getPeriods().get(BASE_INDEX);
+            AirQualityResponse.Place place = locationData.getLocationAirQualityData().getPlace();
+            AirQualityResponse.Period airQualityInfo = locationData.getLocationAirQualityData().getPeriods().get(BASE_INDEX);
 
-        String dominantPollutant = airQualityInfo.getDominant();
-        String aqiIndex = String.valueOf(airQualityInfo.getAqi());
-        String airQuality = airQualityInfo.getCategory();
-        String color = airQualityInfo.getColor();
-        String timeUpdated = airQualityInfo.getDateTimeISO();
-        String methodMeasured = airQualityInfo.getMethod();
-        String placeName = place.getName();
-        String country = place.getCountry();
+            String dominantPollutant = airQualityInfo.getDominant();
+            String aqiIndex = String.valueOf(airQualityInfo.getAqi());
+            String airQuality = airQualityInfo.getCategory();
+            String color = airQualityInfo.getColor();
+            String timeUpdated = airQualityInfo.getDateTimeISO();
+            String methodMeasured = airQualityInfo.getMethod();
+            String placeName = place.getName();
+            String country = place.getCountry();
 
-        locationNameTV.setText(String.format("%s (%s, %s)", locationData.getLocationName(), placeName, country));
-        dominantPollutionTV.setText(String.format(getString(R.string.dominant_pollutant), dominantPollutant));
-        textView.setText(String.format("%s\n%s", aqiIndex, airQuality));
+            locationNameTV.setText(String.format("%s (%s, %s)", locationData.getLocationName(), placeName, country));
+            dominantPollutionTV.setText(String.format(getString(R.string.dominant_pollutant), dominantPollutant));
+            textView.setText(String.format("%s\n%s", aqiIndex, airQuality));
 
-        GradientDrawable drawable = (GradientDrawable) ringView.getBackground();
-        drawable.setStroke(Constants.AQI_INDEX_STROKE_WIDTH, ColorUtils.getColor(color));
+            GradientDrawable drawable = (GradientDrawable) ringView.getBackground();
+            drawable.setStroke(Constants.AQI_INDEX_STROKE_WIDTH, ColorUtils.getColor(color));
+        } else {
+            // Nothing to show
+            showEmptyStateView();
+        }
     }
 
     /**
@@ -129,9 +147,10 @@ public class HomeFragment extends Fragment {
                     // Save location offline
                     final LocationData locationData = new LocationData(getString(R.string.current_location), rootObject.getResponse().get(BASE_INDEX));
                     mainViewModel.saveHomeLocationData(locationData);
-                    // display home location
                     displayLocationData(locationData);
                 } else {
+                    // No data to show , show empty state view
+                    showEmptyStateView();
                     Toast.makeText(getActivity(), R.string.network_data_null, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -198,6 +217,8 @@ public class HomeFragment extends Fragment {
                 if (location != null) {
                     getLocationDataFromNetwork(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 } else {
+                    // No data to show , show Empty state view
+                    showEmptyStateView();
                     Toast.makeText(getContext(), R.string.location_null_error, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -231,6 +252,8 @@ public class HomeFragment extends Fragment {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                     Toast.makeText(getActivity(), R.string.location_permission_denied, Toast.LENGTH_SHORT).show();
+                    // Nothing to show
+                    showEmptyStateView();
                 }
             }
         }
@@ -242,5 +265,32 @@ public class HomeFragment extends Fragment {
      */
     private ArrayList<AirQualityResponse.Pollutant> getPollutants(LocationData locationData) {
         return locationData.getLocationAirQualityData().getPeriods().get(BASE_INDEX).getPollutants();
+    }
+
+    /**
+     * Show the main UI and hide the empty state view
+     */
+    private void showMainUI() {
+        mainView.setVisibility(View.VISIBLE);
+        emptyStateView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+    }
+
+    /**
+     * Show the empty state view and hide the main UI
+     */
+    private void showEmptyStateView() {
+        mainView.setVisibility(View.GONE);
+        emptyStateView.setVisibility(View.VISIBLE);
+        loadingView.setVisibility(View.GONE);
+    }
+
+    /**
+     * Show loading UI on loading of data
+     */
+    private void showLoadingUI() {
+        mainView.setVisibility(View.GONE);
+        emptyStateView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.VISIBLE);
     }
 }

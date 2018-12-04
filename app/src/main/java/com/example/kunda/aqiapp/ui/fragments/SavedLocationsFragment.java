@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kunda.aqiapp.R;
@@ -30,6 +31,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -52,6 +54,8 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
     private FloatingActionButton fab;
     private MainViewModel mainViewModel;
     private long homeLocationDataID;
+    private Group mainView;
+    private TextView emptyStateView;
 
     public SavedLocationsFragment() {
         // Required empty public constructor
@@ -65,6 +69,8 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
 
         locationDataRV = rootView.findViewById(R.id.rv_saved_location_data);
         locationDataRV.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        mainView = rootView.findViewById(R.id.saved_location_fragment_main_view);
+        emptyStateView = rootView.findViewById(R.id.saved_location_empty_state_view);
         fab = rootView.findViewById(R.id.fab_add_place);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,8 +91,15 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         mainViewModel.getSavedLocationDataList().observe(getActivity(), new Observer<List<LocationData>>() {
             @Override
             public void onChanged(List<LocationData> locationData) {
-                adapter.setLocationDataList(locationData);
-                locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
+                if (locationData != null) {
+                    // Show main UI
+                    showMainUI();
+                    adapter.setLocationDataList(locationData);
+                    locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
+                } else {
+                    // No saved location
+                    showEmptyStateView();
+                }
             }
         });
         /*
@@ -194,5 +207,21 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
 
     private Fragment getFragment() {
         return this;
+    }
+
+    /**
+     * Show the main UI and hide the empty state view
+     */
+    private void showMainUI() {
+        mainView.setVisibility(View.VISIBLE);
+        emptyStateView.setVisibility(View.GONE);
+    }
+
+    /**
+     * Show the empty state view and hide the main UI
+     */
+    private void showEmptyStateView() {
+        mainView.setVisibility(View.GONE);
+        emptyStateView.setVisibility(View.VISIBLE);
     }
 }
