@@ -7,24 +7,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.kunda.aqiapp.R;
-import com.example.kunda.aqiapp.data.AirQualityRepository;
 import com.example.kunda.aqiapp.data.sync.SyncUtils;
 import com.example.kunda.aqiapp.ui.fragments.HomeFragment;
 import com.example.kunda.aqiapp.ui.fragments.PollutantsInfoFragment;
 import com.example.kunda.aqiapp.ui.fragments.SavedLocationsFragment;
-import com.example.kunda.aqiapp.ui.viewModel.MainViewModel;
-import com.example.kunda.aqiapp.utils.InjectorUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private MainViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
         init();
 
-        AirQualityRepository repository = InjectorUtils.provideAirQualityRepository(this);
         // Initialize firebase job dispatcher
         SyncUtils.initializeSync(this);
 
@@ -44,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void init(){
         BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
-        viewModel = ViewModelProviders.of(this,InjectorUtils.provideMainViewModelFactory(this)).get(MainViewModel.class);
     }
 
     @Override
@@ -81,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.about_data:
                 final String url = getResources().getString(R.string.aqi_color_guide);
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                builder.setToolbarColor(Color.parseColor("#2196F3"));
+                builder.setToolbarColor(Color.parseColor(getString(R.string.custom_tab_color)));
                 CustomTabsIntent customTabsIntent = builder.build();
                 customTabsIntent.launchUrl(this, Uri.parse(url));
                 break;

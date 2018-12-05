@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
  */
 public class MainViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-    AirQualityRepository repository;
+    private AirQualityRepository repository;
 
     public MainViewModelFactory(AirQualityRepository repository){
         this.repository = repository;

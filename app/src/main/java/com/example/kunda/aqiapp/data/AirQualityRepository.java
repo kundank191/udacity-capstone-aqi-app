@@ -108,7 +108,7 @@ public class AirQualityRepository {
      * updates the location data in local repository
      * @param locationData to be updated
      */
-    public void updateLocationData(final LocationData locationData) {
+    private void updateLocationData(final LocationData locationData) {
         executors.diskIO().execute(new Runnable() {
             @Override
             public void run() {

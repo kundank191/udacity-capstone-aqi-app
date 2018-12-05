@@ -9,7 +9,38 @@
     <dimen name="dots_height">30dp</dimen>
     <dimen name="dots_margin_bottom">20dp</dimen>
     <dimen name="img_width_height">120dp</dimen>
-    <dimen name="slide_title">30dp</dimen>
-    <dimen name="slide_desc">16dp</dimen>
+    <dimen name="slide_title">30sp</dimen>
+    <dimen name="slide_desc">16sp</dimen>
     <dimen name="desc_padding">40dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="about_pollutant_image_height">240dp</dimen>
+    <dimen name="about_pollutant_tv_name_margin_start">16dp</dimen>
+    <dimen name="about_pollutant_tv_name_margin_top">8dp</dimen>
+    <dimen name="about_pollutant_tv_subtitle_margin_start">16dp</dimen>
+    <dimen name="about_pollutant_rv_subtitle_margin_top">4dp</dimen>
+    <dimen name="about_pollutant_tv_description_width">0dp</dimen>
+    <dimen name="about_pollutant_tv_description_margin_start">16dp</dimen>
+    <dimen name="about_pollutant_tv_description_margin_top">16dp</dimen>
+    <dimen name="about_pollutant_tv_description_margin_end">16dp</dimen>
+    <dimen name="about_pollutant_button_detail_link_margin_top">16dp</dimen>
+    <dimen name="about_pollutant_button_detail_link_margin_end">16dp</dimen>
+    <dimen name="about_pollutant_button_detail_link_margin_bottom">8dp</dimen>
+    <dimen name="splash_screen_icon_width">150dp</dimen>
+    <dimen name="splash_screen_icon_height">150dp</dimen>
+    <dimen name="app_widget_tv_aqi_margin_start">8dp</dimen>
+    <dimen name="app_widget_tv_aqi_margin_top">8dp</dimen>
+    <dimen name="app_widget_tv_aqi_margin_end">8dp</dimen>
+    <dimen name="app_widget_tv_name_margin_top">8dp</dimen>
+    <dimen name="app_widget_tv_dominant_pollutant_margin_bottom">8dp</dimen>
+    <dimen name="app_widget_tv_air_quality_margin_top">2dp</dimen>
+    <dimen name="app_widget_tv_air_quality_margin_bottom">2dp</dimen>
+    <dimen name="fragment_home_ring_width">300dp</dimen>
+    <dimen name="fragment_home_ring_aqi_height">300dp</dimen>
+    <dimen name="pollutant_info_image_height">240dp</dimen>
+    <dimen name="two_row_item_height">72dp</dimen>
 </resources>

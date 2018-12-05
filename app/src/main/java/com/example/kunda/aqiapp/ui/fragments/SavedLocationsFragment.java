@@ -88,7 +88,8 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         homeLocationDataID = mainViewModel.getHomeLocationDataID();
         adapter = new SavedLocationDataAdapter(getFragment(),null,homeLocationDataID);
         locationDataRV.setAdapter(adapter);
-        mainViewModel.getSavedLocationDataList().observe(getActivity(), new Observer<List<LocationData>>() {
+
+        mainViewModel.getSavedLocationDataList().observe(Objects.requireNonNull(getActivity()), new Observer<List<LocationData>>() {
             @Override
             public void onChanged(List<LocationData> locationData) {
                 if (locationData != null) {
@@ -125,7 +126,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
                             .build(Objects.requireNonNull(getActivity()));
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-            Toast.makeText(getContext(), "Error getting place info", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.error_getting_place_info, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -140,7 +141,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
                     break;
                 case PlaceAutocomplete.RESULT_ERROR:
                     Status status = PlaceAutocomplete.getStatus(Objects.requireNonNull(getContext()), data);
-                    Toast.makeText(getContext(), "Error getting place info", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.error_getting_place_info, Toast.LENGTH_SHORT).show();
                     Timber.i(status.getStatusMessage());
                     break;
                 case RESULT_CANCELED:
@@ -155,9 +156,9 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
     // TODO select any one of the function
 
     private void getLocationNameFromDialogBox(final Place place) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-        alertDialog.setTitle("Add Location");
-        alertDialog.setMessage("Enter name of the new location");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+        alertDialog.setTitle(getString(R.string.dialog_title));
+        alertDialog.setMessage(getString(R.string.dialog_subtitle));
 
         final EditText input = new EditText(getContext());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -166,7 +167,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         input.setLayoutParams(lp);
         alertDialog.setView(input);
 
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(getString(R.string.dialog_positive_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String locationName = input.getText().toString();
@@ -197,12 +198,11 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
 
     @Override
     public void markAsHomeLocationData(View view, LocationData locationData, int position) {
-        Timber.d("Hello");
         mainViewModel.saveHomeLocationData(locationData);
         homeLocationDataID = locationData.getLocationID();
         mainViewModel.setSavedLocationFragmentRVPosition(position);
        // locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
-        Toast.makeText(getActivity(),"Home location set to \"" + locationData.getLocationName() + "\"",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), String.format(getString(R.string.home_location_saved), locationData.getLocationName()),Toast.LENGTH_SHORT).show();
     }
 
     private Fragment getFragment() {

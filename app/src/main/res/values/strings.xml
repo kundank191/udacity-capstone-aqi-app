@@ -4,8 +4,6 @@
     <string name="pollutants_title">Pollutants</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="splash_image_content_description">air quality index app</string>
 
     <!-- welcome screen -->
@@ -73,16 +71,32 @@
     <string name="save_earth_description">Every year people all over celebrate World Environment Day, with plans in mind to save earth and the environment. But sometimes we need to ask ourselves “will we really execute our plans?” The existence of nature is the proof of our own existence and everybody appreciates the existence of water, forest, animals, songbird, flora, and fauna, but unfortunately, these can be misused and end up being harmed. The environment is polluted by various things such as radioactive elements, plastics, sewage, domestic waste and industrial pollution.</string>
     <string name="reduce_air_pollution_link" translatable="false">https://www.wikihow.com/Take-Action-to-Reduce-Air-Pollution</string>
     <string name="about_air_pollution_nat_geo_link" translatable="false">https://www.nationalgeographic.com/environment/global-warming/pollution/</string>
+
     <string name="open_details_of_pollutant">Open details</string>
     <string name="more_details">More Details</string>
     <string name="main_menu_about_location">About Location</string>
+
+    <!-- Error messages -->
     <string name="error_getting_data">Error getting place data</string>
     <string name="location_permission_denied">Permission denied to access location</string>
     <string name="network_data_null">Error getting data from internet</string>
+    <string name="widget_no_home_location">No Saved Home Location</string>
+    <string name="no_saved_locations_empty_state">No Saved Locations</string>
+    <string name="no_location_marked_as_home_empty_state">No Location Marked as home</string>
+    <string name="error_getting_place_info">Error getting place info</string>
+
     <string name="dominant_pollutant">Dominant pollutant : %s</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="widget_empty_text">Your home location data will be shown here</string>
     <string name="widget_text_air_quality">Air Quality</string>
-    <string name="widget_no_home_location">No Saved Home Location</string>
+
+    <!-- add location dialog box -->
+    <string name="dialog_title">Add Location</string>
+    <string name="dialog_subtitle">Enter name of the new location</string>
+    <string name="dialog_positive_button">OK</string>
+    <string name="home_location_saved">Home location set to \"%s\"</string>
+
+    <string name="custom_tab_color" translatable="false">#2196F3</string>
+
 </resources>

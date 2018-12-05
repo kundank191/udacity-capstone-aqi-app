@@ -14,6 +14,7 @@ import com.example.kunda.aqiapp.data.AboutPollutant;
 import com.example.kunda.aqiapp.ui.adapters.AboutPollutantsAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -26,10 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
  * create an instance of this fragment.
  */
 public class PollutantsInfoFragment extends Fragment {
-
-    private AboutPollutantsAdapter aboutPollutantsAdapter;
-    private RecyclerView recyclerView;
-    private Button saveEarthDetails;
 
     public PollutantsInfoFragment() {
         // Required empty public constructor
@@ -44,8 +41,8 @@ public class PollutantsInfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pollutants_info, container, false);
-        recyclerView = view.findViewById(R.id.about_pollutant_rv);
-        saveEarthDetails = view.findViewById(R.id.button_save_earth_details);
+        RecyclerView recyclerView = view.findViewById(R.id.about_pollutant_rv);
+        Button saveEarthDetails = view.findViewById(R.id.button_save_earth_details);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
 
         ArrayList<AboutPollutant> aboutPollutantArrayList = new ArrayList<>();
@@ -55,13 +52,13 @@ public class PollutantsInfoFragment extends Fragment {
         aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_no2_name,R.string.pollutant_no2_subtitle,R.string.pollutant_no2_description, R.string.pollutant_no2_details_link, R.drawable.about_pollutant_nox));
         aboutPollutantArrayList.add(new AboutPollutant(R.string.pollutant_so2_name,R.string.pollutant_so2_subtitle,R.string.pollutant_so2_description, R.string.pollutant_so2_details_link, R.drawable.about_pollutant_so));
 
-        aboutPollutantsAdapter = new AboutPollutantsAdapter(getContext(), aboutPollutantArrayList);
+        AboutPollutantsAdapter aboutPollutantsAdapter = new AboutPollutantsAdapter(getContext(), aboutPollutantArrayList);
         recyclerView.setAdapter(aboutPollutantsAdapter);
 
         saveEarthDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String url = getContext().getResources().getString(R.string.about_air_pollution_nat_geo_link);
+                final String url = Objects.requireNonNull(getContext()).getResources().getString(R.string.about_air_pollution_nat_geo_link);
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 builder.setToolbarColor(Color.parseColor("#2196F3"));
                 CustomTabsIntent customTabsIntent = builder.build();

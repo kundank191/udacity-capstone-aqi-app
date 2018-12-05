@@ -2,6 +2,7 @@ package com.example.kunda.aqiapp.data;
 
 /**
  * Created by Kundan on 01-10-2018.
+ * POJO which related to a pollutant data
  */
 public class AboutPollutant {
 

@@ -8,6 +8,7 @@ import androidx.room.Embedded;
 
 /**
  * Created by Kundan on 22-09-2018.
+ * POJO for the internet data response
  */
 public class AirQualityResponse {
 

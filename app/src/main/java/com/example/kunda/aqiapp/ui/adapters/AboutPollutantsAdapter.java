@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Kundan on 01-10-2018.
+ * Shows pollutant data in the about pollutant adapter
  */
 public class AboutPollutantsAdapter extends RecyclerView.Adapter<AboutPollutantsAdapter.ViewHolder> {
 

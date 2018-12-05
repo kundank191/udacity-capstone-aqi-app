@@ -8,8 +8,8 @@
     tools:context=".ui.SplashScreenActivity">
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="@dimen/splash_screen_icon_width"
+        android:layout_height="@dimen/splash_screen_icon_height"
         android:src="@drawable/cityscape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/about_country"
+        android:id="@+id/about_data"
         android:icon="@drawable/ic_round_info"
         app:showAsAction="always"
         android:title="@string/main_menu_about_location"

@@ -8,8 +8,8 @@
 
     <View
         android:id="@+id/ring_view"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="@dimen/fragment_home_ring_width"
+        android:layout_height="@dimen/fragment_home_ring_aqi_height"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -22,14 +22,27 @@
         android:id="@+id/api_index_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        tools:text="AirQuality Data"
+        android:layout_marginTop="104dp"
         android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        app:layout_constraintEnd_toEndOf="@+id/ring_view"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/ring_view"
+        app:layout_constraintTop_toTopOf="@+id/ring_view"
+        tools:text="72" />
+
+    <TextView
+        android:id="@+id/tv_home_aqi_air_quality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/ring_view"
         app:layout_constraintEnd_toEndOf="@+id/ring_view"
         app:layout_constraintStart_toStartOf="@+id/ring_view"
-        app:layout_constraintTop_toTopOf="@+id/ring_view" />
+        app:layout_constraintTop_toBottomOf="@+id/api_index_tv"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="good quality" />
 
     <TextView
         android:id="@+id/tv_dominant_pollutant"
@@ -50,6 +63,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         app:layout_constraintBottom_toTopOf="@+id/rv_pollutants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,6 +113,6 @@
         android:id="@+id/home_fragment_main_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="rv_pollutants,tv_home_location,tv_dominant_pollutant,api_index_tv,ring_view"
+        app:constraint_referenced_ids="rv_pollutants,tv_home_location,tv_dominant_pollutant,api_index_tv,ring_view,tv_home_aqi_air_quality"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,10 +46,6 @@ public class HomeDataAppWidget extends AppWidgetProvider {
             // Hide the empty state text view
             views.setViewVisibility(R.id.widget_tv_empty_view,GONE);
 
-            //TODO find a way to access widget text view background and change color accordingly
-            //GradientDrawable priorityCircle = (GradientDrawable) textView.getBackground();
-            // Get the appropriate background color based on the priority
-            //priorityCircle.setStroke(Constants.POLLUTANT_INDEX_STROKE_WIDTH,ColorUtils.getColor(color));
         } else {
             // If there is no saved home location data
             views.setViewVisibility(R.id.widget_rv_data, View.GONE);

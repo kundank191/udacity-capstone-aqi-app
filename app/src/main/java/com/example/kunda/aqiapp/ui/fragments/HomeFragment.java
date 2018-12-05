@@ -50,7 +50,8 @@ public class HomeFragment extends Fragment {
     private MainViewModel mainViewModel;
     private final int LOCATION_PERMISSION_CODE = 101;
 
-    private TextView textView;
+    private TextView aqiIndexTV;
+    private TextView airQualityTV;
     private TextView locationNameTV;
     private TextView dominantPollutionTV;
     private View ringView;
@@ -80,7 +81,8 @@ public class HomeFragment extends Fragment {
         MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
 
-        textView = rootView.findViewById(R.id.api_index_tv);
+        aqiIndexTV = rootView.findViewById(R.id.api_index_tv);
+        airQualityTV = rootView.findViewById(R.id.tv_home_aqi_air_quality);
         locationNameTV = rootView.findViewById(R.id.tv_home_location);
         dominantPollutionTV = rootView.findViewById(R.id.tv_dominant_pollutant);
         ringView = rootView.findViewById(R.id.ring_view);
@@ -116,14 +118,13 @@ public class HomeFragment extends Fragment {
             String aqiIndex = String.valueOf(airQualityInfo.getAqi());
             String airQuality = airQualityInfo.getCategory();
             String color = airQualityInfo.getColor();
-            String timeUpdated = airQualityInfo.getDateTimeISO();
-            String methodMeasured = airQualityInfo.getMethod();
             String placeName = place.getName();
             String country = place.getCountry();
 
             locationNameTV.setText(String.format("%s (%s, %s)", locationData.getLocationName(), placeName, country));
             dominantPollutionTV.setText(String.format(getString(R.string.dominant_pollutant), dominantPollutant));
-            textView.setText(String.format("%s\n%s", aqiIndex, airQuality));
+            aqiIndexTV.setText(aqiIndex);
+            airQualityTV.setText(airQuality);
 
             GradientDrawable drawable = (GradientDrawable) ringView.getBackground();
             drawable.setStroke(Constants.AQI_INDEX_STROKE_WIDTH, ColorUtils.getColor(color));
@@ -164,7 +165,7 @@ public class HomeFragment extends Fragment {
                 final LocationData homeLocationData = mainViewModel.getHomeLocationData();
                 if (homeLocationData != null) {
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             displayLocationData(homeLocationData);

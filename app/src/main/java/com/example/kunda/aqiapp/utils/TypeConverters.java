@@ -12,6 +12,7 @@ import androidx.room.TypeConverter;
 
 /**
  * Created by Kundan on 10-10-2018.
+ * used by room database
  */
 public class TypeConverters {
 

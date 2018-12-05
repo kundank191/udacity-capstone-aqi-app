@@ -31,7 +31,6 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
 
         TextView locationNameTV;
         TextView locationDescriptionTV;
-        TextView locationDetailsTV;
         ImageView markAsHomeIV;
         TextView placeAqiIndexTV;
 
@@ -148,14 +147,15 @@ public class SavedLocationDataAdapter extends RecyclerView.Adapter<SavedLocation
         return fragment.getContext();
     }
 
-    public Fragment getFragment() {
-        return fragment;
-    }
-
     public interface MarkAsHomeLocationDataListener {
         void markAsHomeLocationData(View view, LocationData locationData, int position);
     }
 
+    /**
+     *
+     * @param name of place
+     * @return the formatted place name with first string as an upper case
+     */
     private String getFormattedPlaceName(String name){
         return name.substring(0,1).toUpperCase() + name.substring(1);
     }
