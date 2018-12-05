@@ -11,7 +11,6 @@ import java.util.Objects;
 import androidx.annotation.Nullable;
 
 import static com.example.kunda.aqiapp.utils.Constants.ACTION_REFRESH_ALL_LOCATION_DATA;
-import static com.example.kunda.aqiapp.utils.Constants.ACTION_REFRESH_COUNTRY_DATA;
 
 /**
  * Created by Kundan on 17-10-2018.
@@ -26,11 +25,10 @@ public class SyncLocationDataService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         // Get the repository reference
-        AirQualityRepository airQualityRepository = InjectorUtils.getAirQualityRepository(this);
+        AirQualityRepository airQualityRepository = InjectorUtils.provideAirQualityRepository(this);
 
         switch (Objects.requireNonNull(Objects.requireNonNull(intent).getAction())) {
-            case ACTION_REFRESH_COUNTRY_DATA:
-                break;
+            // Refresh all the saved location data
             case ACTION_REFRESH_ALL_LOCATION_DATA:
                 airQualityRepository.syncAllLocationsData();
                 break;

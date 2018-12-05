@@ -1,35 +1,25 @@
 package com.example.kunda.aqiapp.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.kunda.aqiapp.R;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
-import com.example.kunda.aqiapp.data.network.CountryInfoResponse;
 import com.example.kunda.aqiapp.data.sync.SyncUtils;
 import com.example.kunda.aqiapp.ui.fragments.HomeFragment;
 import com.example.kunda.aqiapp.ui.fragments.PollutantsInfoFragment;
 import com.example.kunda.aqiapp.ui.fragments.SavedLocationsFragment;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModel;
-import com.example.kunda.aqiapp.utils.Constants;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.Gson;
-
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -45,16 +35,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
         init();
 
-        AirQualityRepository repository = InjectorUtils.getAirQualityRepository(this);
+        AirQualityRepository repository = InjectorUtils.provideAirQualityRepository(this);
         // Initialize firebase job dispatcher
         SyncUtils.initializeSync(this);
 
-        repository.getCountryData("23.4306","85.4154").observe(this, new Observer<CountryInfoResponse.RootObject>() {
-            @Override
-            public void onChanged(@Nullable CountryInfoResponse.RootObject rootObject) {
-                saveCountryInfoInPreferences(getBaseContext(),rootObject);
-            }
-        });
     }
 
     private void init(){
@@ -94,16 +78,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about_country:
-                // TODO do something about the country data
-                Toast.makeText(this,getCountryDataFromPreferences(this),Toast.LENGTH_SHORT).show();
-
+            case R.id.about_data:
                 final String url = getResources().getString(R.string.aqi_color_guide);
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 builder.setToolbarColor(Color.parseColor("#2196F3"));
                 CustomTabsIntent customTabsIntent = builder.build();
                 customTabsIntent.launchUrl(this, Uri.parse(url));
-
                 break;
         }
         return true;
@@ -119,21 +99,4 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .commit();
     }
 
-    private void saveCountryInfoInPreferences(Context context, CountryInfoResponse.RootObject countryInfo){
-        if ( countryInfo != null) {
-            CountryInfoResponse.Response countryData = countryInfo.getResponse();
-            Gson gson = new Gson();
-            String countryDataString = gson.toJson(countryData);
-            SharedPreferences.Editor editor = Objects.requireNonNull(context).getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
-            editor.putString(Constants.SAVED_COUNTRY_DATA, countryDataString);
-            editor.apply();
-        }
-    }
-
-    private String getCountryDataFromPreferences(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SAVED_LOCATION_PREFS_FILE_NAME,Context.MODE_PRIVATE);
-        String countryData = sharedPreferences.getString(Constants.SAVED_COUNTRY_DATA,null);
-        viewModel.setCountryData(countryData);
-        return viewModel.getCountryData();
-    }
 }

@@ -3,8 +3,6 @@ package com.example.kunda.aqiapp.ui.viewModel;
 import com.example.kunda.aqiapp.data.AirQualityRepository;
 import com.example.kunda.aqiapp.data.database.LocationData;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
-import com.example.kunda.aqiapp.data.network.CountryInfoResponse;
-import com.example.kunda.aqiapp.data.network.IndicesResponse;
 
 import java.util.List;
 
@@ -26,9 +24,6 @@ public class MainViewModel extends ViewModel {
     private String latitude;
     private String longitude;
     private LiveData<AirQualityResponse.RootObject> airQualityResponse;
-    private LiveData<CountryInfoResponse.RootObject> locationInfoResponse;
-    private LiveData<IndicesResponse.RootObject> indicesInfoResponse;
-    private String countryData = null;
     private int savedLocationFragmentRVPosition = 0;
 
     public LocationData getHomeLocationData(){
@@ -58,16 +53,6 @@ public class MainViewModel extends ViewModel {
         return airQualityResponse;
     }
 
-    public LiveData<CountryInfoResponse.RootObject> getLocationInfoResponse(String latitude, String longitude) {
-        locationInfoResponse = repository.getCountryData(latitude,longitude);
-        return locationInfoResponse;
-    }
-
-    public LiveData<IndicesResponse.RootObject> getIndicesInfoResponse(String latitude, String longitude, String indicesType) {
-        indicesInfoResponse = repository.getIndicesInfo(latitude,longitude,indicesType);
-        return indicesInfoResponse;
-    }
-
     public LiveData<List<LocationData>> getSavedLocationDataList(){
         return repository.loadSavedLocationData();
     }
@@ -78,14 +63,6 @@ public class MainViewModel extends ViewModel {
 
     public void saveHomeLocationData(LocationData locationData){
         repository.saveHomeLocationData(locationData);
-    }
-
-    public String getCountryData() {
-        return countryData;
-    }
-
-    public void setCountryData(String countryData) {
-        this.countryData = countryData;
     }
 
     public int getSavedLocationFragmentRVPosition() {

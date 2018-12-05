@@ -3,6 +3,7 @@ package com.example.kunda.aqiapp.ui.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.example.kunda.aqiapp.R;
@@ -10,6 +11,8 @@ import com.example.kunda.aqiapp.data.database.LocationData;
 import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.example.kunda.aqiapp.utils.Constants.BASE_INDEX;
 
 /**
@@ -20,9 +23,7 @@ public class HomeDataAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, LocationData homeLocationData) {
 
-
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-        String text = context.getString(R.string.widget_empty_text);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
         
         if (homeLocationData != null) {
 
@@ -41,7 +42,18 @@ public class HomeDataAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.appwidget_tv_place_name, String.format("%s (%s, %s)", homeLocationData.getLocationName(), placeName, country));
             views.setTextViewText(R.id.appwidget_tv_air_quality,String.format("%s : %s",context.getString(R.string.widget_text_air_quality),airQuality));
             views.setTextViewText(R.id.appwidget_tv_dominant_pollutant,String.format(context.getString(R.string.dominant_pollutant), dominantPollutant));
+            views.setTextViewText(R.id.appwidget_tv_aqi_index,aqiIndex);
+            // Hide the empty state text view
+            views.setViewVisibility(R.id.widget_tv_empty_view,GONE);
 
+            //TODO find a way to access widget text view background and change color accordingly
+            //GradientDrawable priorityCircle = (GradientDrawable) textView.getBackground();
+            // Get the appropriate background color based on the priority
+            //priorityCircle.setStroke(Constants.POLLUTANT_INDEX_STROKE_WIDTH,ColorUtils.getColor(color));
+        } else {
+            // If there is no saved home location data
+            views.setViewVisibility(R.id.widget_rv_data, View.GONE);
+            views.setViewVisibility(R.id.widget_tv_empty_view,VISIBLE);
         }
         
         // Instruct the widget manager to update the widget
