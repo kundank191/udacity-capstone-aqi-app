@@ -5,7 +5,7 @@ android {
         release {
             keyAlias 'NoAlias'
             keyPassword 'KEY@UDACITY'
-            storeFile file('X:/Android/Android Nanodegree/Projects/castapone/release_key.jks')
+            storeFile file('$rootDir/keystore/release_key.jks')
             storePassword 'KEY@UDACITY'
         }
     }
