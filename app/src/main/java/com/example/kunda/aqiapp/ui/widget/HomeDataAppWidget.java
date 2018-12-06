@@ -33,9 +33,6 @@ public class HomeDataAppWidget extends AppWidgetProvider {
             String dominantPollutant = airQualityInfo.getDominant();
             String aqiIndex = String.valueOf(airQualityInfo.getAqi());
             String airQuality = airQualityInfo.getCategory();
-            String color = airQualityInfo.getColor();
-            String timeUpdated = airQualityInfo.getDateTimeISO();
-            String methodMeasured = airQualityInfo.getMethod();
             String placeName = place.getName();
             String country = place.getCountry();
 

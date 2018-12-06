@@ -156,8 +156,6 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    // TODO select any one of the function
-
     private void getLocationNameFromDialogBox(final Place place) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
         alertDialog.setTitle(getString(R.string.dialog_title));

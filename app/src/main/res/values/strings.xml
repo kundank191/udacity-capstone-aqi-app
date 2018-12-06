@@ -38,9 +38,6 @@
     <!-- Location fragment -->
     <string name="aqi_color_guide" translatable="false">https://webcam.srs.fs.fed.us/test/AQI.shtml</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <!-- About Pollutants -->
     <string name="pollutant_co_name" translatable="false">CO</string>
     <string name="pollutant_co_subtitle">Carbon Monoxide</string>
@@ -98,5 +95,7 @@
     <string name="home_location_saved">Home location set to \"%s\"</string>
 
     <string name="custom_tab_color" translatable="false">#2196F3</string>
+    <string name="mark_as_home">Mark as home</string>
+    <string name="pollutant_image">Pollutant image</string>
 
 </resources>

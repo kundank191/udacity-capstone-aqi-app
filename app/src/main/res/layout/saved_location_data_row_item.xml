@@ -36,8 +36,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_location_name"
         tools:text="Subtitle" />
 
-
-    <!-- content description set dynamically -->
     <ImageView
         android:id="@+id/iv_mark_as_home"
         android:layout_width="wrap_content"
@@ -48,7 +46,8 @@
         android:src="@drawable/ic_round_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/mark_as_home"/>
 
     <TextView
         android:id="@+id/fab_place_aqi_index"
