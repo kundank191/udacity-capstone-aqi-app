@@ -1,6 +1,8 @@
 package com.example.kunda.aqiapp.ui.fragments;
 
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import com.example.kunda.aqiapp.data.network.AirQualityResponse;
 import com.example.kunda.aqiapp.ui.adapters.SavedLocationDataAdapter;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModel;
 import com.example.kunda.aqiapp.ui.viewModel.MainViewModelFactory;
+import com.example.kunda.aqiapp.ui.widget.HomeDataAppWidget;
 import com.example.kunda.aqiapp.utils.InjectorUtils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -86,7 +89,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         MainViewModelFactory viewModelFactory = InjectorUtils.provideMainViewModelFactory(getContext());
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
         homeLocationDataID = mainViewModel.getHomeLocationDataID();
-        adapter = new SavedLocationDataAdapter(getFragment(),null,homeLocationDataID);
+        adapter = new SavedLocationDataAdapter(getFragment(), null, homeLocationDataID);
         locationDataRV.setAdapter(adapter);
 
         mainViewModel.getSavedLocationDataList().observe(Objects.requireNonNull(getActivity()), new Observer<List<LocationData>>() {
@@ -110,7 +113,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         locationDataRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if ( dy > 0) {
+                if (dy > 0) {
                     fab.hide();
                 } else {
                     fab.show();
@@ -123,7 +126,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
     private void addNewPlace() {
         try {
             Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                            .build(Objects.requireNonNull(getActivity()));
+                    .build(Objects.requireNonNull(getActivity()));
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             Toast.makeText(getContext(), R.string.error_getting_place_info, Toast.LENGTH_SHORT).show();
@@ -185,7 +188,7 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
                 if (rootObject != null) {
                     saveLocationData(placeName, rootObject.getResponse().get(BASE_INDEX));
                 } else {
-                    Toast.makeText(getContext(),R.string.error_getting_data,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.error_getting_data, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -201,8 +204,24 @@ public class SavedLocationsFragment extends Fragment implements SavedLocationDat
         mainViewModel.saveHomeLocationData(locationData);
         homeLocationDataID = locationData.getLocationID();
         mainViewModel.setSavedLocationFragmentRVPosition(position);
-       // locationDataRV.scrollToPosition(mainViewModel.getSavedLocationFragmentRVPosition());
-        Toast.makeText(getActivity(), String.format(getString(R.string.home_location_saved), locationData.getLocationName()),Toast.LENGTH_SHORT).show();
+        // update widget on home location change
+        updateWidget();
+        Toast.makeText(getActivity(), String.format(getString(R.string.home_location_saved), locationData.getLocationName()), Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Update widget when home location changes
+     * got this function from : https://stackoverflow.com/questions/3455123/programmatically-update-widget-from-activity-service-receiver
+     */
+    private void updateWidget() {
+        Intent intent = new Intent(getActivity(), HomeDataAppWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+        // since it seems the onUpdate() is only fired on that:
+        int[] ids = AppWidgetManager.getInstance(getContext())
+                .getAppWidgetIds(new ComponentName(Objects.requireNonNull(getContext()), HomeDataAppWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        Objects.requireNonNull(getActivity()).sendBroadcast(intent);
     }
 
     private Fragment getFragment() {
