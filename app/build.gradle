@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'NoAlias'
+            keyPassword 'KEY@UDACITY'
+            storeFile file('X:/Android/Android Nanodegree/Projects/castapone/release_key.jks')
+            storePassword 'KEY@UDACITY'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.kunda.aqiapp"
@@ -14,6 +22,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     buildTypes.each {
@@ -37,7 +46,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
-    implementation 'com.afollestad.material-dialogs:input:2.0.0-beta5'
     // Networking
     implementation 'com.firebase:firebase-jobdispatcher:0.7.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
