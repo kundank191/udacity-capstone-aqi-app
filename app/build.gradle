@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         release {
-            keyAlias 'NoAlias'
-            keyPassword 'KEY@UDACITY'
-            storeFile file('$rootDir/keystore/release_key.jks')
-            storePassword 'KEY@UDACITY'
+            keyAlias "key0"
+            keyPassword "KEY@UDACITY"
+            storeFile file("release_key.jks")
+            storePassword "KEY@UDACITY"
         }
     }
     compileSdkVersion 28
@@ -17,6 +17,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
@@ -29,6 +30,8 @@ android {
         //TODO Get API key : https://www.aerisweather.com/support/docs/api/getting-started/
         it.buildConfigField 'String', 'Api_ID', Aeris_API_ID
         it.buildConfigField 'String', 'Api_Secret_ID', Aeris_API_Secret_ID
+    }
+    productFlavors {
     }
 }
 
